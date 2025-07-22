@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap');
+
+@config "../tailwind.config.ts";
+
+@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+/* Set custom properties for colors */
+:root {
+    --background: #faf9f5;
+    --background-foreground: #1a1917;
+
+    --muted: #736b63;
+    --muted-foreground: #1a1917;
+
+    --text-color: #1a1917;
+
+    --secondary: #646cff;
+    --secondary-foreground: #ffffff;
+
+    --destructive: #f44336;
+    --destructive-foreground: #ffffff;
+
+    --accent: #61dafb;
+    --accent-foreground: #ffffff;
+
+    --popover: #ffffff;
+    --popover-foreground: #1a1917;
+
+    --card: #ffffff;
+    --card-foreground: #1a1917;
+
+    --font-family-sans: 'Merriweather Sans', sans-serif;
+    --font-family-serif: 'Merriweather', serif;
+
+    font-family: var(--font-family-serif);
+
+}
+
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
