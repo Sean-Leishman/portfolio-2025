@@ -9,7 +9,7 @@ import process from 'process';
 import { extractLink } from './src/lib/utils';
 
 import mdx from '@mdx-js/rollup';
-import { compile } from '@mdx-js/mdx';
+import { bundleMDX } from 'mdx-bundler';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import remarkMath from 'remark-math';
@@ -45,28 +45,29 @@ async function generateItems(directory: string) {
                 const filePath = path.join(itemsDir, filename);
                 const content = await fs.promises.readFile(filePath, 'utf-8');
 
-                const { data, content: fileContent } = matter(content);
+                const { code, frontmatter } = await bundleMDX({
+                    source: content,
+                    mdxOptions(options, frontmatter) {
+                        options.remarkPlugin = [
+                            remarkGfm,
+                            remarkFrontmatter,
+                            remarkMdxFrontmatter
+                        ];
+                        options.rehypePlugins = [rehypeHighlight, remarkMath];
+                        return options;
+                    }
+                });
 
-                try {
-                    const compiledMDX = await compile(content, {
-                        outputFormat: 'function-body',
-                        remarkPlugins: [remarkGfm],
-                        rehypePlugins: [rehypeHighlight, remarkMath],
-                        development: false
-                    });
 
-                    return {
-                        filename: filename,
-                        title: data.title,
-                        date: data.date,
-                        tags: data.tags || [],
-                        link: extractLink(directory, data.title, data.date),
-                        compiledMdx: compiledMDX,
-                    };
-                } catch (error) {
-                    console.error(`Error compiling ${filename}:`, error);
-                    throw error;
-                }
+                return {
+                    filename: filename,
+                    title: frontmatter.title,
+                    date: frontmatter.date,
+                    tags: frontmatter.tags || [],
+                    link: extractLink(directory, frontmatter.title, frontmatter.date),
+                    compiledMdx: code,
+                };
+
             }
 
             ));

@@ -1,9 +1,9 @@
 import type { Config } from 'tailwindcss';
-const {fontFamily} = require('tailwindcss/defaultTheme');
+const { fontFamily } = require('tailwindcss/defaultTheme');
 
 const config = {
     content: [
-        './src/**/*.{js,ts,jsx,tsx}',
+        './src/**/*.{js,ts,jsx,tsx,mdx,md}',
         './public/index.html',
     ],
     theme: {
@@ -56,7 +56,7 @@ const config = {
             },
         },
     },
-    plugins: [],
+    plugins: [require('@tailwindcss/typography')]
 } satisfies Config;
 
 export default config;

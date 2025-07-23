@@ -31,7 +31,7 @@ function App() {
             key={item.link}
             path={item.link}
             element={
-                <Post compiledMDX={item.compiledMdx.value as String} />
+                <Post compiledMDX={item.compiledMdx as String} />
             }
         />
     ))
