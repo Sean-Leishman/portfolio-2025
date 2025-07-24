@@ -16,7 +16,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         ol: (props) => <ol className="list-decimal my-8" {...props} />,
         ul: (props) => <ul className="list-disc mb-6" {...props} />,
         a: (props) => <a {...props} />,
-        p: (props) => <p className="text-sm mt-4 mb-6" {...props} />,
+        p: (props) => <p className="text-sm mt-4 mb-4" {...props} />,
         strong: (props) => <strong className="font-bold" {...props} />,
         code: (props) => {
             const isInline =

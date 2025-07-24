@@ -4,6 +4,9 @@ import { MDXProvider } from '@mdx-js/react';
 import { getMDXComponent } from 'mdx-bundler/client';
 import { useMDXComponents } from '../lib/mdxComponents';
 
+import LinkTo from './LinkTo';
+import Figure from './Figure';
+
 const MDXRenderer = ({ compiledMDX, components = {} }) => {
     console.log('MDXRenderer compiledMDX:', typeof compiledMDX);
     const Component = React.useMemo(() => {
@@ -18,9 +21,15 @@ const MDXRenderer = ({ compiledMDX, components = {} }) => {
     console.log('Component type:', typeof Component);
     console.log('Component source:', Component.toString().substring(0, 200));
 
+    const MDXComponents = {
+        ...useMDXComponents(components),
+        LinkTo,
+        Figure,
+    }
+
     return (
         <div>
-            <Component components={useMDXComponents(components)} />
+            <Component components={MDXComponents} />
         </div>
     );
 

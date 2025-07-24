@@ -8,7 +8,7 @@ export function extractLink(...args: any[]): string {
             link += (arg + "/");
         }
         else {
-            console.warn("extractLink: Invalid argument type. Expected string, got", typeof arg);
+            console.warn("extractLink: Invalid argument type. Expected string, got", typeof arg, args);
         }
     }
 

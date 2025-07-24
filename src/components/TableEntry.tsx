@@ -4,7 +4,7 @@ function TableEntry({ date, title, link }: { date: string; title: string, link?:
     return (
         <span className="flex items-center gap-2">
             <span className="text-gray-500">{date}</span>
-            <LinkTo link={link} className="text" text={title} />
+            <LinkTo to={link} className="text" text={title} />
         </span >
     )
 }

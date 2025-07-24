@@ -35,9 +35,36 @@ interface ProcessedItem {
     frontmatter: PostData;
 }
 
+const globals = {
+    '@mdx-js/react': {
+        varName: 'MdxJsReact',
+        namedExports: ['useMDXComponents'],
+        defaultExport: false,
+    },
+    'react-router-dom': {
+        varName: 'ReactRouterDom',
+        namedExports: ['Link', 'useParams', 'useLocation'],
+        defaultExport: false,
+    },
+};
+
+let components = {
+    "./src/components/LinkTo.tsx": "",
+    "./src/components/Figure.tsx": "",
+}
+
 async function generateItems(directory: string) {
     const itemsDir = path.join(process.cwd(), "src", directory);
     const filenames = await fs.promises.readdir(itemsDir);
+
+    for (const componentPath of Object.keys(components)) {
+        const componentFullPath = path.join(process.cwd(), componentPath);
+        if (fs.existsSync(componentFullPath)) {
+            components[componentPath] = await fs.promises.readFile(componentFullPath, 'utf-8');
+        } else {
+            console.warn(`Component file not found: ${componentFullPath}`);
+        }
+    }
 
     const items = await Promise.all(
         filenames.filter(filename => filename.endsWith('.mdx') || filename.endsWith('.md'))
@@ -47,6 +74,8 @@ async function generateItems(directory: string) {
 
                 const { code, frontmatter } = await bundleMDX({
                     source: content,
+                    // globals: globals,
+                    files: components,
                     mdxOptions(options, frontmatter) {
                         options.remarkPlugin = [
                             remarkGfm,
@@ -59,6 +88,7 @@ async function generateItems(directory: string) {
                 });
 
 
+                console.log(`Processing file: ${filename}`);
                 return {
                     filename: filename,
                     title: frontmatter.title,

@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 
-const LinkTo = ({text, link}: {
+const LinkTo = ({ text, to }: {
     text: string;
-    link: string;
+    to: string;
 }) => {
     return (
-        <Link to={link} className="text-blue-500 hover:underline">
+        <Link to={to} className="text-blue-500 hover:underline">
             {text}
         </Link>
     );
