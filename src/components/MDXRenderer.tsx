@@ -4,8 +4,25 @@ import { MDXProvider } from '@mdx-js/react';
 import { getMDXComponent } from 'mdx-bundler/client';
 import { useMDXComponents } from '../lib/mdxComponents';
 
+import SyntaxHighlighter from 'react-syntax-highlighter';
+
 import LinkTo from './LinkTo';
 import Figure from './Figure';
+
+function code({ className, ...properties }) {
+    const match = /language-\[(\w+)\]/.exec(className || '');
+    console.log('code className:', className, 'match', match);
+    return match ? (
+        <SyntaxHighlighter
+            language={match[1]}
+            PreTag="div"
+            {...properties}
+        />
+    ) : (
+        <code {...properties} />
+    );
+
+}
 
 const MDXRenderer = ({ compiledMDX, components = {} }) => {
     console.log('MDXRenderer compiledMDX:', typeof compiledMDX);
@@ -25,6 +42,7 @@ const MDXRenderer = ({ compiledMDX, components = {} }) => {
         ...useMDXComponents(components),
         LinkTo,
         Figure,
+        code,
     }
 
     return (

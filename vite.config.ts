@@ -11,7 +11,6 @@ import { extractLink } from './src/lib/utils';
 import mdx from '@mdx-js/rollup';
 import { bundleMDX } from 'mdx-bundler';
 import remarkGfm from 'remark-gfm';
-import rehypeHighlight from 'rehype-highlight';
 import remarkMath from 'remark-math';
 import remarkFrontmatter from 'remark-frontmatter';
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
@@ -82,7 +81,7 @@ async function generateItems(directory: string) {
                             remarkFrontmatter,
                             remarkMdxFrontmatter
                         ];
-                        options.rehypePlugins = [rehypeHighlight, remarkMath];
+                        options.rehypePlugins = [remarkMath];
                         return options;
                     }
                 });
@@ -140,7 +139,7 @@ export default defineConfig({
             ...mdx({
                 providerImportSource: '@mdx-js/react',
                 remarkPlugins: [remarkGfm, remarkFrontmatter, remarkMdxFrontmatter],
-                rehypePlugins: [rehypeHighlight, remarkMath],
+                rehypePlugins: [remarkMath],
                 development: false,
             }),
         },

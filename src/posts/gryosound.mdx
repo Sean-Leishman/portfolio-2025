@@ -67,8 +67,7 @@ However, this brings up another issue, as we cannot share data across activities
 To resolve this issue, a singleton class was implemented to store data that should be persistent across activities. On initialisation of an activity, and as such it's `ViewModel`, data is gathered from the data repository and data is set consistently when it is required based on user input.
 
 
-< highlight kotlin >
-```
+```[kotlin]
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
     private var soundPool = SoundPool(8, AudioManager.STREAM_MUSIC, 0)
     // for all functions, a button id corresponds to a specific slot in the following 2 arrays
@@ -94,7 +93,6 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     }
 }
 ```
-< /highlight >
 
 As such, we receive the benefit of both classes with no memory leakage and persistent and consistent data across both activities and fragments.
 
@@ -126,8 +124,7 @@ $$
 
 As such a final frequency can be calculated that allows pitch to be specified by the user and then by the orientation of the device.
 
-< highlight kotlin >
-```
+```[kotlin]
 fun changeFreq(newFreq: Float) { //sets the base frequency according to gyroscope inout
   _freq.value = newFreq
   semitone = DataRepository.getInstance().getSemitone()
@@ -139,7 +136,6 @@ fun changeFreq(newFreq: Float) { //sets the base frequency according to gyroscop
   }
 }
 ```
-< /highlight >
 
 ## App Testing
 

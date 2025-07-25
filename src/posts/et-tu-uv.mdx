@@ -35,8 +35,7 @@ Generally, there was an approach of quickly slamming together components to form
 The final solution involved overcoming numerouse engineering challenges to allow communication between various different components, effectively and within a fairly short time frame. The main roadblock occured within the phone and arduino module as the chosen method of communication was bluetooth and as such, data was fairly easily sent out of the bluetooth module but then the phone itself had to send the data to a server. The
 <LinkTo to="https://play.google.com/store/apps/details?id=com.adafruit.bluefruit.le.connect&hl=en_GB&gl=US" text="app" />, was not made ourselves and as such we were restricted by the chosen method.
 
-<highlight cpp>
-```
+```[cpp]
 if (currentMillis - previousSendMillis >= sendInterval) {
 
     previousSendMillis += sendInterval;
@@ -81,7 +80,6 @@ ble.waitForOK();
 int chimeResult = shouldChime(ble.buffer);
 chimeResult = -1;
 ```
-</highlight>
 
 An output was created and sent via BLE containing (Temp., Humidity, UV) within a singular string into the phone which in turn sent results via MQTT to the final server which processed the results.
 
