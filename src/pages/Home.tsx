@@ -1,43 +1,65 @@
 import LinkTo from '../components/LinkTo'
 import Main from '../components/Main'
-import Experience from '../components/Experience'
 import PostsList from '../components/PostsList'
 import ProjectCard from '../components/ProjectCard'
 import Dot from '../components/Dot'
+import ExperienceList from '../components/ExperienceList'
+import EmailLink from '../components/EmailLink'
+
+import getProjects from '../lib/projects'
+
+const projects = getProjects();
+const subsetProjects = projects.slice(0, 3);
+
 
 function Home() {
     return (
         <Main imageSrc="/src/assets/pdga/daily_life_russian.jpg">
-            <p className="text-base m-4">
-                An undergraduate computer science student at the
-                University of Edinburgh. Interested in machine learning, software engineering and web
-                design
-            </p>
-            <div className="flex justify-evenly items-center mt-4 max-w-60 mx-auto">
+            <div className="text-base font-semibold block mx-8">
+                <span className="mb-2 clear-none">
+                    <img src="/src/assets/pdga/dr-w.jpg" alt="W" className="w-24 h-auto mr-2 clear-none float-left" />
+                    elcome to my corner of the internet. I'm <span className="text-accent italic">Sean</span>.
+                    This is where I discuss my projects, share my thoughts, and document my journey.
+                    I have recently graduated with a degree in Computer Science from the University of Edinburgh and will be working as a Graduate Software Engineer at Squarepoint Capital.
+                    I have a passion for software engineering and natural language processing but I love to explore new technologies and ideas.
+                </span>
+                <span className="block mt-6">
+                    Feel free to explore, look through my <LinkTo to="/projects" text="projects" customClassName='italic font-semibold' />, read my <LinkTo to="/posts" text="posts" customClassName='italic font-semibold' />, or just have a look around!
+                </span>
+            </div>
+            <div className="flex justify-evenly items-center mt-4 mb-16 max-w-85 mx-auto">
                 <a href="https://github.com/Sean-Leishman" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline font-sans font-bold">GitHub ↗</a>
                 <a href="https://www.linkedin.com/in/sean-leishman-755766202/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline font-sans font-bold">LinkedIn ↗</a>
+                <EmailLink />
 
             </div>
 
             <h1 className="text-2xl mt-8 font-bold text-center">PROJECTS<Dot /></h1>
-            <div className="flex flex-col items-center">
-                <ProjectCard name="CodeMe" description="Search engine developed to efficiently find relevant code snippets and discussions built using the StackOverflow dataset. Employs advanced information retrieval techniques across 59 million posts" externalLink="./portfolio" date="2024-2025" image="/src/assets/CodeMe.png" technologies={["Python", "React", "PostgreSQL"]} />
-                <ProjectCard name="PairwiseTurnGPT" description="A timing-aware lexical-only turn-taking model developed and evaluated as part of my undergraduate dissertation and a subsequent publication at SemDial. Uses a dual-stream transformer model" link="./portfolio" date="2023-2025" image="/src/assets/pairwise_turngpt.png" externalLink="https://www.semdial.org/anthology/papers/Z/Z24/Z24-3002/" technologies={["Python", "Torch"]} />
-                <ProjectCard name="Portfolio" description="My personal portfolio website." link="./portfolio" date="2025" image="/src/assets/Portfolio.png" technologies={["Typescript", "three.js"]} />
-                <div className="mt-8 text-center text-muted-foreground">
+            <div className="flex flex-col items-center mb-16">
+                {subsetProjects.map((project, index) => (
+                    <ProjectCard
+                        key={index}
+                        name={project.name}
+                        description={project.description}
+                        externalLink={project.externalLink}
+                        blogLink={project.blogLink}
+                        date={project.date}
+                        image={project.image}
+                        githubLink={project.githubLink}
+                        technologies={project.technologies}
+                    />
+                ))}
+                <div className="mt-6 text-center text-muted-foreground">
                     <p>And many more projects ...</p>
-                    <LinkTo className="text-center" to="/projects" text=" View all projects here" />
+                    <LinkTo customClassName="text-center" to="/projects" text=" View all projects here" />
                 </div>
             </div>
-            <h1 className="text-2xl mt-16 font-bold text-center">EXPERIENCE<Dot /></h1>
-            <div>
-                <Experience company="University of Edinburgh" role="Undergraduate Student" date="2020 - Present" logo="/src/assets/uoe.jpg" />
-                <Experience company="Squarepoint Capital" role="Software Engineer Intern" date="Summer 2024" logo="/src/assets/sqpc.png" />
-                <Experience company="Coretech Security" role="Software Engineer Intern" date="Summer 2023" logo="/src/assets/coretech.png" />
-                <Experience company="Singapore Management University" role="Exchange Student" date="2023-2024" logo="/src/assets/smu.png" />
+            <div className="mb-16">
+                <h1 className="text-2xl font-bold text-center">EXPERIENCE<Dot /></h1>
+                <ExperienceList />
             </div>
             <div className="">
-                <h1 className="text-2xl mt-8 font-bold text-center">POSTS<Dot /></h1>
+                <h1 className="text-2xl font-bold text-center">POSTS<Dot /></h1>
                 <PostsList isHome={true} />
             </div>
         </Main >

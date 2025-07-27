@@ -1,14 +1,13 @@
-function Figure({ src, alt, className }: { src: string; alt?: string; className?: string }) {
+function Figure({ src, alt, className }: { src: string | undefined; alt?: string | undefined; className?: string | undefined }) {
     if (!src) {
         return <></>;
     }
 
-    console.log(`Figure: src=${src}, alt=${alt}, className=${className}`);
 
+    const classNames = className + " " + "rounded-lg shadow-md mb-4 mx-auto";
     return (
         <figure>
-            <img src={src} alt={alt} className={className} />
-            <figcaption>{alt}</figcaption>
+            <img src={src} alt={alt} className={classNames} />
         </figure>
     );
 }

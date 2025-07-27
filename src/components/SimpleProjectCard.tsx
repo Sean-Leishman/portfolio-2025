@@ -1,10 +1,11 @@
 import LinkTo from './LinkTo';
 
-function SimpleProjectCard({ name, date, description, blogLink, externalLink, image, technologies }: { name: string, date: string, description: string, blogLink: string, externalLink: string, image: string, technologies: string[] }) {
+function SimpleProjectCard({ name, date, description, blogLink, externalLink, technologies, githubLink }: { name: string, date: string, description: string, blogLink: string | undefined, externalLink: string | undefined, image: string, technologies: string[], githubLink: string }) {
     technologies = technologies || [];
 
     const externalLinkItem = externalLink ? <a href={externalLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">↗</a> : null;
-    const blogLinkItem = blogLink ? <LinkTo to={blogLink} text="See More." className="text-blue-600 hover:underline" /> : null;
+    const blogLinkItem = blogLink ? <LinkTo to={blogLink} text="See More." customClassName="text-blue-600 hover:underline" /> : null;
+    const githubLinkItem = githubLink ? <a href={githubLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">GitHub ↗</a> : null;
 
     return (
         <div className="flex flex-col gap-4 p-4 border-gray-200 text-sm justify-start">
@@ -19,6 +20,7 @@ function SimpleProjectCard({ name, date, description, blogLink, externalLink, im
                     {blogLinkItem}
                 </div>
                 <p className="text-gray-700">{description}</p>
+                {githubLinkItem}
             </div>
             <div className="flex flex-wrap gap-2 justify-center">
                 {technologies.map((tech, index) => (

@@ -1,4 +1,5 @@
 import TopBar from '../components/TopBar'
+import Footer from '../components/Footer'
 
 function Main({ imageSrc, children }: { imageSrc: string, children: React.ReactNode }) {
     return (
@@ -12,6 +13,7 @@ function Main({ imageSrc, children }: { imageSrc: string, children: React.ReactN
                     {children}
                 </div>
             </div>
+            <Footer />
         </main>
     )
 }

@@ -6,7 +6,9 @@ import LinkTo from './LinkTo';
 function PostsList({ isHome = false }: { isHome?: boolean }) {
     const posts = getPosts();
 
-    const postsLink = isHome ? <span>See all <LinkTo text="posts" to="./posts" /></span> : null;
+    const postsCount = posts.length;
+    const postsLink = isHome ? <span>{postsCount} more posts can be found in <LinkTo text="all posts" to="./posts" /></span> : null;
+
     return (
         <div className="">
             <ul className="list-disc">

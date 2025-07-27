@@ -4,7 +4,6 @@ import tailwindcss from '@tailwindcss/vite'
 
 import fs from 'fs';
 import path from 'path';
-import matter from 'gray-matter';
 import process from 'process';
 import { extractLink } from './src/lib/utils';
 
@@ -14,40 +13,10 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import remarkFrontmatter from 'remark-frontmatter';
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
-interface PostData {
-    title: string;
-    date: string;
-    tags?: string[];
-    excerpt?: string;
-    [key: string]: any;
-}
 
-interface ProcessedItem {
-    filename: string;
-    slug: string;
-    title: string;
-    date: string;
-    tags: string[];
-    excerpt: string;
-    compiledMDX: string;
-    frontmatter: PostData;
-}
-
-const globals = {
-    '@mdx-js/react': {
-        varName: 'MdxJsReact',
-        namedExports: ['useMDXComponents'],
-        defaultExport: false,
-    },
-    'react-router-dom': {
-        varName: 'ReactRouterDom',
-        namedExports: ['Link', 'useParams', 'useLocation'],
-        defaultExport: false,
-    },
-};
-
-let components = {
+let components: { [key: string]: string } = {
     "./src/components/LinkTo.tsx": "",
     "./src/components/Figure.tsx": "",
 }
@@ -60,14 +29,13 @@ async function generateItems(directory: string) {
         const componentFullPath = path.join(process.cwd(), componentPath);
         if (fs.existsSync(componentFullPath)) {
             components[componentPath] = await fs.promises.readFile(componentFullPath, 'utf-8');
-        } else {
-            console.warn(`Component file not found: ${componentFullPath}`);
+
         }
     }
 
     const items = await Promise.all(
-        filenames.filter(filename => filename.endsWith('.mdx') || filename.endsWith('.md'))
-            .map(async (filename) => {
+        filenames.filter((filename: string) => filename.endsWith('.mdx') || filename.endsWith('.md'))
+            .map(async (filename: string) => {
                 const filePath = path.join(itemsDir, filename);
                 const content = await fs.promises.readFile(filePath, 'utf-8');
 
@@ -75,7 +43,7 @@ async function generateItems(directory: string) {
                     source: content,
                     // globals: globals,
                     files: components,
-                    mdxOptions(options, frontmatter) {
+                    mdxOptions(options, _) {
                         options.remarkPlugin = [
                             remarkGfm,
                             remarkFrontmatter,
@@ -87,12 +55,13 @@ async function generateItems(directory: string) {
                 });
 
 
-                console.log(`Processing file: ${filename}`);
                 return {
                     filename: filename,
                     title: frontmatter.title,
                     date: frontmatter.date,
                     tags: frontmatter.tags || [],
+                    imageSrc: frontmatter.imageSrc || '',
+                    imageAlt: frontmatter.imageAlt || '',
                     link: extractLink(directory, frontmatter.title, frontmatter.date),
                     compiledMdx: code,
                 };
@@ -101,7 +70,8 @@ async function generateItems(directory: string) {
 
             ));
 
-    return items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+    return items.sort((a: any, b: any) => { return new Date(b.date).getTime() - new Date(a.date).getTime() });
 }
 
 function contentGeneratorPlugin() {
@@ -110,7 +80,6 @@ function contentGeneratorPlugin() {
         async buildStart() {
             const content = {
                 posts: await generateItems('posts'),
-                projects: await generateItems('projects'),
             }
 
             const outputPath = path.join(process.cwd(), 'src', 'generated');
@@ -128,6 +97,24 @@ function contentGeneratorPlugin() {
 }
 
 export default defineConfig({
+    assetsInclude: ['**/*.svg', '**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.webp', '**/*.avif'],
+    build: {
+        sourcemap: true,
+        rollupOptions: {
+            output: {
+                assetFileNames: (assetInfo) => {
+                    console.log(assetInfo);
+                    if (assetInfo.name && assetInfo.name.endsWith('.svg')) {
+                        return 'src/assets/svg/[name][extname]';
+                    }
+                    if (assetInfo.name && (assetInfo.name.endsWith('.png') || assetInfo.name.endsWith('.jpg') || assetInfo.name.endsWith('.jpeg') || assetInfo.name.endsWith('.gif') || assetInfo.name.endsWith('.webp') || assetInfo.name.endsWith('.avif'))) {
+                        return 'src/assets/images/[name][extname]';
+                    }
+                    return 'src/assets/[name][extname]';
+                }
+            }
+        }
+    },
     plugins: [
         react(
             { include: ['**/*.tsx', '**/*.jsx', '**/*.ts', '**/*.js', '**/*.mdx', '**/*.md', '**/*.html', '**/*.svg', '**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.webp', '**/*.avif'] },
@@ -143,8 +130,17 @@ export default defineConfig({
                 development: false,
             }),
         },
+        viteStaticCopy({
+            targets: [
+                {
+                    src: 'src/assets/**/*',
+                    dest: 'src/assets',
+                }
+            ]
+        }
+        )
     ],
     optimizeDeps: {
         include: ["react/jsx-runtime"]
-    }
-})
+    },
+});
