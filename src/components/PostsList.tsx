@@ -1,22 +1,27 @@
 import { getPosts } from '../lib/content';
 
 import TableEntry from './TableEntry';
+import LinkTo from './LinkTo';
 
-function PostsList() {
+function PostsList({ isHome = false }: { isHome?: boolean }) {
     const posts = getPosts();
 
+    const postsLink = isHome ? <span>See all <LinkTo text="posts" to="./posts" /></span> : null;
     return (
-        <ul className="list-disc pl-5">
-            {posts.map((post, index) => (
-                <li key={index} className="my-2 list-none">
-                    <TableEntry
-                        title={post.title}
-                        date={post.date}
-                        link={post.link}
-                    />
-                </li>
-            ))}
-        </ul>
+        <div className="">
+            <ul className="list-disc">
+                {posts.map((post, index) => (
+                    <li key={index} className="my-4 list-none">
+                        <TableEntry
+                            title={post.title}
+                            date={post.date}
+                            link={post.link}
+                        />
+                    </li>
+                ))}
+            </ul>
+            {postsLink}
+        </div>
     );
 }
 

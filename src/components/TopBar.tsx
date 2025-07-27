@@ -1,11 +1,17 @@
+import LinkTo from './LinkTo';
+
 const TopBar = () => {
     return (
-        <div className="flex justify-center items-center font-sans min-h-24">
+        <div className="flex justify-center items-center font-sans font-bold min-h-24">
             <nav className="w-full">
                 <ul className="flex justify-between">
-                    <li><a href="/" className="hover:underline">XXX</a></li>
-                    <li><a href="#about" className="text-muted hover:underline">About</a></li>
-                    <li><a href="#contact" className="text-muted hover:underline">Contact</a></li>
+                    <li><a href="/" className="hover:underline font-extrabold"><span className="text-accent">x</span>xx</a></li>
+                    <li>
+                        <LinkTo to="/posts" text="posts" underline={false} muted={true} />
+                    </li>
+                    <li>
+                        <LinkTo to="/projects" text="projects" underline={false} muted={true} />
+                    </li>
                 </ul>
             </nav>
         </div>

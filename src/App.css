@@ -13,13 +13,13 @@
 
 /* Set custom properties for colors */
 :root {
-    --background: #faf9f5;
-    --background-foreground: #1a1917;
+    --background: 48, 33%, 97%;
+    --background-foreground: 32, 21%, 14%;
 
     --muted: #736b63;
-    --muted-foreground: #1a1917;
+    --muted-foreground: 30, 7%, 42%;
 
-    --text-color: #1a1917;
+    --text-color: 32, 21%, 14%;
 
     --secondary: #646cff;
     --secondary-foreground: #ffffff;
@@ -27,7 +27,7 @@
     --destructive: #f44336;
     --destructive-foreground: #ffffff;
 
-    --accent: #61dafb;
+    --accent: 1, 76%, 32%;
     --accent-foreground: #ffffff;
 
     --popover: #ffffff;
@@ -40,6 +40,7 @@
     --font-family-serif: 'Merriweather', serif;
 
     font-family: var(--font-family-serif);
+    background-color: hsl(var(--background));
 
 }
 
@@ -49,6 +50,9 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+}
+
+.main-container {
 }
 
 .logo {
@@ -81,4 +85,8 @@
 
 .card {
   padding: 2em;
+}
+
+p {
+    font-weight: 500;
 }

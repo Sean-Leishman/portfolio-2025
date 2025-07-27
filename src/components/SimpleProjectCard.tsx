@@ -1,9 +1,9 @@
 import LinkTo from './LinkTo';
 
-function ProjectCard({ name, date, description, blogLink, externalLink, image, technologies }: { name: string, date: string, description: string, blogLink: string, externalLink: string, image: string, technologies: string[] }) {
+function SimpleProjectCard({ name, date, description, blogLink, externalLink, image, technologies }: { name: string, date: string, description: string, blogLink: string, externalLink: string, image: string, technologies: string[] }) {
     technologies = technologies || [];
 
-    const externalLinkItem = externalLink ? <a href={externalLink} target="_blank" rel="noopener noreferrer" className="text-accent fond-extrabold hover:underline">↗</a> : null;
+    const externalLinkItem = externalLink ? <a href={externalLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">↗</a> : null;
     const blogLinkItem = blogLink ? <LinkTo to={blogLink} text="See More." className="text-blue-600 hover:underline" /> : null;
 
     return (
@@ -20,7 +20,6 @@ function ProjectCard({ name, date, description, blogLink, externalLink, image, t
                 </div>
                 <p className="text-gray-700">{description}</p>
             </div>
-            <img src={image} alt={`${name} screenshot`} className="w-full h-64 object-cover rounded-md" />
             <div className="flex flex-wrap gap-2 justify-center">
                 {technologies.map((tech, index) => (
                     <span key={index} className="px-2 py-1 bg-gray-200 text-gray-800 rounded-full text-xs">{tech}</span>
@@ -30,4 +29,4 @@ function ProjectCard({ name, date, description, blogLink, externalLink, image, t
     );
 }
 
-export default ProjectCard;
+export default SimpleProjectCard;
