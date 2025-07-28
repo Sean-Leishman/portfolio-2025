@@ -103,7 +103,6 @@ export default defineConfig({
         rollupOptions: {
             output: {
                 assetFileNames: (assetInfo) => {
-                    console.log(assetInfo);
                     if (assetInfo.name && assetInfo.name.endsWith('.svg')) {
                         return 'src/assets/svg/[name][extname]';
                     }
@@ -138,7 +137,7 @@ export default defineConfig({
                 }
             ]
         }
-        )
+        ),
     ],
     optimizeDeps: {
         include: ["react/jsx-runtime"]

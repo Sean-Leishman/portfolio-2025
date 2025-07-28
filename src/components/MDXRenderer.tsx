@@ -13,7 +13,6 @@ function code({ className, children, ...properties }: any) {
     if (!match) {
         return <></>;
     }
-    console.log('code className:', className, 'match', match);
     return <SyntaxHighlighter
         language={match[1]}
         PreTag="div"
