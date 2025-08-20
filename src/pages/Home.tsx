@@ -49,7 +49,7 @@ function Home() {
                         technologies={project.technologies}
                     />
                 ))}
-                <div className="mt-6 text-center text-muted-foreground">
+                <div className="mt-6 text-center text-muted-foreground italic">
                     <p>And many more projects ...</p>
                     <LinkTo customClassName="text-center" to="/projects" text=" View all projects here" />
                 </div>
