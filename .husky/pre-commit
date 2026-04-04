@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Sync public Obsidian notes to portfolio
+npm run sync
+
+# Stage any synced files
+git add src/posts/*.mdx src/assets/blog/* 2>/dev/null || true
