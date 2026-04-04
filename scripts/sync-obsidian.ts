@@ -128,6 +128,7 @@ function convertImageEmbeds(content: string, sourceDir: string): { content: stri
             path.join(OBSIDIAN_VAULT, 'Attachments', imagePath),
             path.join(OBSIDIAN_VAULT, 'assets', imagePath),
             path.join(OBSIDIAN_VAULT, 'Excalidraw', imagePath),
+            path.join(OBSIDIAN_VAULT, '99 Archive', 'Images', imagePath),
         ];
 
         let foundPath: string | null = null;
@@ -191,15 +192,15 @@ function convertCallouts(content: string): string {
 function convertToMDX(content: string, sourceFile: string): { content: string; images: string[] } {
     const sourceDir = path.dirname(sourceFile);
 
+    // Convert image embeds FIRST (before wikilinks, as ![[]] would be matched by [[]])
+    const { content: withImages, images } = convertImageEmbeds(content, sourceDir);
+    let converted = withImages;
+
     // Convert wikilinks (uses the public posts index)
-    let converted = convertWikilinks(content);
+    converted = convertWikilinks(converted);
 
     // Convert callouts
     converted = convertCallouts(converted);
-
-    // Convert image embeds and collect images to copy
-    const { content: withImages, images } = convertImageEmbeds(converted, sourceDir);
-    converted = withImages;
 
     // Remove Obsidian-specific HTML blocks
     converted = converted
