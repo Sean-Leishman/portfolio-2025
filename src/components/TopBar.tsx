@@ -1,4 +1,5 @@
 import LinkTo from './LinkTo';
+import ThemeToggle from './ThemeToggle';
 
 const TopBar = () => {
     return (
@@ -11,6 +12,9 @@ const TopBar = () => {
                     </li>
                     <li>
                         <LinkTo to="/projects" text="projects" underline={false} muted={true} />
+                    </li>
+                    <li className="flex items-end">
+                        <ThemeToggle />
                     </li>
                 </ul>
             </nav>

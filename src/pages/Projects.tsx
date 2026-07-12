@@ -43,7 +43,7 @@ function Projects() {
     }
 
     /*
-        *                 <button className="mb-2 px-4 py-2 text-white border border-gray-300 rounded-lg bg-accent" onClick={() => setSimpleMode(!simpleMode)}>Switch to {simpleMode ? "Detailed" : "Simple"} View</button>
+        *                 <button className="mb-2 px-4 py-2 text-white border border-border rounded-lg bg-accent" onClick={() => setSimpleMode(!simpleMode)}>Switch to {simpleMode ? "Detailed" : "Simple"} View</button>
         */
 
     return (

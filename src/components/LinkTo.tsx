@@ -8,7 +8,7 @@ const LinkTo = ({ text, to, underline = true, muted = false, customClassName = "
     customClassName?: string;
 }) => {
     const isUnderline = underline ? 'underline' : '';
-    const isMuted = muted ? 'text-muted-foreground' : 'text-black-500';
+    const isMuted = muted ? 'text-muted-foreground' : 'text-foreground';
     const className = customClassName + ' hover:underline ' + isUnderline + ' ' + isMuted;
 
     if (!to) {

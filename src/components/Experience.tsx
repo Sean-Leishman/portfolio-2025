@@ -1,5 +1,20 @@
 import { useState } from 'react';
 
+function Section({ label, items }: { label: string; items: string[] }) {
+    return (
+        <div className="mb-5">
+            <p className="eyebrow mb-2">{label}</p>
+            <ul className="space-y-1">
+                {items.map((item, i) => (
+                    <li key={i} className="text-sm leading-relaxed text-foreground/80 pl-4 -indent-4 before:content-['—'] before:mr-2 before:text-muted-foreground">
+                        {item}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+
 function Experience({
     company,
     role,
@@ -21,115 +36,57 @@ function Experience({
 }) {
     const [isExpanded, setIsExpanded] = useState(false);
 
-    const toggleExpanded = () => {
-        setIsExpanded(!isExpanded);
-    };
+    const sections = [
+        { label: 'Achievements', items: achievements },
+        { label: 'Responsibilities', items: responsibilities },
+        { label: 'Details', items: details },
+    ].filter((s): s is { label: string; items: string[] } => !!s.items?.length);
 
-    const hasAchievements = achievements && achievements.length > 0;
-    const hasDetails = details && details.length > 0;
-    const hasResponsibilities = responsibilities && responsibilities.length > 0;
-    const hasSkills = skills && skills.length > 0;
+    const canExpand = sections.length > 0 || !!skills?.length;
 
     return (
-        <div className="flex flex-col justify-start border-b border-gray-200 p-4">
-            {/* Header Row */}
+        <div className="border-t border-border py-6">
             <div
-                className="flex justify-between text-sm cursor-pointer"
-                onClick={toggleExpanded}
+                className={`flex items-baseline justify-between gap-x-6 gap-y-2 flex-wrap ${canExpand ? 'cursor-pointer group' : ''}`}
+                onClick={() => canExpand && setIsExpanded(!isExpanded)}
+                role={canExpand ? 'button' : undefined}
+                tabIndex={canExpand ? 0 : undefined}
+                aria-expanded={canExpand ? isExpanded : undefined}
+                onKeyDown={(e) => {
+                    if (canExpand && (e.key === 'Enter' || e.key === ' ')) {
+                        e.preventDefault();
+                        setIsExpanded(!isExpanded);
+                    }
+                }}
             >
-                <div className="flex justify-start items-center gap-4">
-                    <img src={logo} alt={`${company} logo`} className="w-5" />
-                    <h3 className="font-semibold text-gray-800">{role}</h3>
-                </div>
-                <div className="flex justify-end items-center gap-4 text-right text-xs text-gray-500">
-                    <p>{company} | {date}</p>
-                    <span className={`text-blue-500 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
-                        ▼
-                    </span>
+                <h3 className="text-xl font-bold tracking-tight text-foreground group-hover:text-accent transition-colors">
+                    {role}
+                </h3>
+                <div className="mono text-xs text-muted-foreground flex items-center gap-2 shrink-0">
+                    <img src={logo} alt="" className="w-4 h-4 object-contain rounded-sm" />
+                    <span>{company} · {date}</span>
+                    {canExpand && (
+                        <span className={`ml-1 transition-transform duration-300 ${isExpanded ? 'rotate-45' : ''}`}>+</span>
+                    )}
                 </div>
             </div>
 
-            {/* Expandable Content */}
-            <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isExpanded ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                <div className="mt-4 text-sm rounded-lg">
-                    <div className="bg-gradient-to-br from-slate-50 to-gray-100 mx-2 px-5 py-4 rounded-xl border border-gray-200">
+            {/* grid 0fr -> 1fr animates to the content's real height, no max-h guessing */}
+            <div className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100 mt-6' : 'grid-rows-[0fr] opacity-0'}`}>
+                <div className="overflow-hidden">
+                    {sections.map((s) => (
+                        <Section key={s.label} label={s.label} items={s.items} />
+                    ))}
 
-                        {/* Achievements Section */}
-                        {hasAchievements && (
-                            <div className="mb-3">
-                                <h5 className="text-sm font-bold text-amber-700 mb-1.5">
-                                    Achievements:
-                                </h5>
-                                <ul className="space-y-0.5 ml-1">
-                                    {achievements!.map((achievement, index) => (
-                                        <li
-                                            key={index}
-                                            className="text-gray-700 leading-relaxed before:content-['•'] before:mr-2 before:text-amber-600"
-                                        >
-                                            {achievement}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-
-                        {/* Details Section */}
-                        {hasDetails && (
-                            <div className="mb-3">
-                                <h5 className="text-sm font-bold text-gray-700 mb-1.5">
-                                    Details:
-                                </h5>
-                                <ul className="space-y-0.5 ml-1">
-                                    {details!.map((detail, index) => (
-                                        <li
-                                            key={index}
-                                            className="text-gray-600 leading-relaxed before:content-['•'] before:mr-2 before:text-gray-400"
-                                        >
-                                            {detail}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-
-                        {/* Responsibilities Section */}
-                        {hasResponsibilities && (
-                            <div className="mb-3">
-                                <h5 className="text-sm font-bold text-gray-700 mb-1.5">
-                                    Responsibilities:
-                                </h5>
-                                <ul className="space-y-0.5 ml-1">
-                                    {responsibilities!.map((responsibility, index) => (
-                                        <li
-                                            key={index}
-                                            className="text-gray-600 leading-relaxed before:content-['•'] before:mr-2 before:text-gray-400"
-                                        >
-                                            {responsibility}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-
-                        {/* Skills Section */}
-                        {hasSkills && (
-                            <div>
-                                <h5 className="text-sm font-bold text-gray-700 mb-1.5">
-                                    Skills:
-                                </h5>
-                                <div className="flex flex-wrap gap-2 ml-1">
-                                    {skills!.map((skill, index) => (
-                                        <span
-                                            key={index}
-                                            className="px-3 py-1 text-xs text-gray-600 bg-white rounded-full border border-gray-300"
-                                        >
-                                            {skill}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                    {!!skills?.length && (
+                        <div className="flex flex-wrap gap-2">
+                            {skills.map((skill, i) => (
+                                <span key={i} className="mono px-2.5 py-1 text-xs text-muted-foreground border border-border rounded-full">
+                                    {skill}
+                                </span>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

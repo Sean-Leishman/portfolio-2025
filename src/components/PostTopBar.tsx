@@ -7,7 +7,7 @@ function PostTopBar({ backLink, title, date, imageSrc, imageAlt, summary, hideSu
         linkto = <></>;
     }
 
-    let summaryText = <span className="text-gray-500 italic">{summary}</span>;
+    let summaryText = <span className="text-muted-foreground italic">{summary}</span>;
     if (hideSummary || !summary) {
         summaryText = <></>;
     }

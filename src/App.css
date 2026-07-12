@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap');
 
 @config "../tailwind.config.ts";
 
@@ -9,41 +9,97 @@
 @tailwind utilities;
 @plugin "@tailwindcss/typography";
 
+/* dark is driven by a class on <html>, set before paint by the inline script in index.html */
+@custom-variant dark (&:where(.dark, .dark *));
 
-
-/* Set custom properties for colors */
 :root {
     --background: 48, 33%, 97%;
     --background-foreground: 32, 21%, 14%;
-
-    --muted: #736b63;
-    --muted-foreground: 30, 7%, 42%;
-
+    --foreground: 32, 21%, 14%;
     --text-color: 32, 21%, 14%;
 
-    --secondary: #646cff;
-    --secondary-foreground: #ffffff;
+    --muted: 40, 12%, 92%;
+    --muted-foreground: 30, 7%, 42%;
 
-    --destructive: #f44336;
-    --destructive-foreground: #ffffff;
+    --border: 40, 10%, 87%;
+    --input: 40, 10%, 87%;
+    --ring: 1, 76%, 32%;
+
+    --secondary: 234, 100%, 70%;
+    --secondary-foreground: 0, 0%, 100%;
+
+    --destructive: 4, 90%, 58%;
+    --destructive-foreground: 0, 0%, 100%;
 
     --accent: 1, 76%, 32%;
-    --accent-foreground: #ffffff;
+    --accent-foreground: 0, 0%, 100%;
 
-    --popover: #ffffff;
-    --popover-foreground: #1a1917;
+    --popover: 0, 0%, 100%;
+    --popover-foreground: 32, 21%, 14%;
 
-    --card: #ffffff;
-    --card-foreground: #1a1917;
+    --card: 0, 0%, 100%;
+    --card-foreground: 32, 21%, 14%;
+
+    /* background dot grid */
+    --dot: 32 21% 14%;
+    --dot-opacity: 0.14;
 
     --font-family-sans: 'Merriweather Sans', sans-serif;
     --font-family-serif: 'Merriweather', serif;
+    --font-family-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-    font-family: var(--font-family-serif);
-    background-color: hsl(var(--background));
-
+    color-scheme: light;
 }
 
+.dark {
+    --background: 30, 8%, 8%;
+    --background-foreground: 40, 14%, 90%;
+    --foreground: 40, 14%, 90%;
+    --text-color: 40, 14%, 90%;
+
+    --muted: 30, 7%, 15%;
+    --muted-foreground: 35, 8%, 60%;
+
+    --border: 33, 8%, 20%;
+    --input: 33, 8%, 20%;
+    --ring: 6, 70%, 58%;
+
+    --destructive: 4, 80%, 62%;
+
+    --accent: 6, 72%, 60%;
+    --accent-foreground: 30, 8%, 8%;
+
+    --popover: 30, 7%, 12%;
+    --popover-foreground: 40, 14%, 90%;
+
+    --card: 30, 7%, 12%;
+    --card-foreground: 40, 14%, 90%;
+
+    --dot: 40 20% 80%;
+    --dot-opacity: 0.13;
+
+    color-scheme: dark;
+}
+
+html {
+    background-color: hsl(var(--background));
+}
+
+body {
+    font-family: var(--font-family-serif);
+    color: hsl(var(--foreground));
+    min-height: 100vh;
+
+    /* dot grid, painted straight onto the body over the background colour */
+    background-color: hsl(var(--background));
+    background-image: radial-gradient(
+        hsl(var(--dot) / var(--dot-opacity)) 1px,
+        transparent 1px
+    );
+    background-size: 24px 24px;
+    background-position: -1px -1px;
+    background-attachment: fixed;
+}
 
 #root {
   max-width: 1280px;
@@ -52,41 +108,25 @@
   text-align: center;
 }
 
-.main-container {
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
 p {
     font-weight: 500;
+}
+
+/* small uppercase mono label used for section eyebrows and metadata */
+.mono {
+    font-family: var(--font-family-mono);
+    font-weight: 400;
+}
+
+.eyebrow {
+    font-family: var(--font-family-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
+}
+
+/* photos are lit for a white page; take the glare off in dark mode */
+.dark img {
+    filter: brightness(0.88) contrast(1.03);
 }
