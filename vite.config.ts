@@ -99,6 +99,10 @@ function contentGeneratorPlugin() {
 export default defineConfig({
     assetsInclude: ['**/*.svg', '**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.webp', '**/*.avif'],
     build: {
+        // react-snap pins puppeteer 1.20 (Chromium ~78), which predates `??` and `?.` (Chrome 80).
+        // Without this the pre-render throws `SyntaxError: Unexpected token '?'` on every route and
+        // silently emits empty <div id="root"></div> shells -- which is what the live site served.
+        target: 'es2019',
         sourcemap: true,
         rollupOptions: {
             output: {

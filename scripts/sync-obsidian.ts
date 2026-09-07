@@ -13,11 +13,48 @@ const __dirname = path.dirname(__filename);
 // Was a hardcoded WSL path (/mnt/c/.../Obsidian Vault); it died silently on the move to Linux
 // and took the pre-commit hook down with it. Override with OBSIDIAN_VAULT if the vault moves again.
 const OBSIDIAN_VAULT = process.env.OBSIDIAN_VAULT ?? path.join(os.homedir(), 'Projects', 'Nordorn');
-const PORTFOLIO_POSTS = path.join(__dirname, '..', 'src', 'posts');
-const PORTFOLIO_ASSETS = path.join(__dirname, '..', 'src', 'assets', 'blog');
+// Overridable so the leak-gate test can run against a throwaway vault and output dir
+// instead of writing fixtures into the real repo.
+const PORTFOLIO_POSTS = process.env.PORTFOLIO_POSTS ?? path.join(__dirname, '..', 'src', 'posts');
+const PORTFOLIO_ASSETS = process.env.PORTFOLIO_ASSETS ?? path.join(__dirname, '..', 'src', 'assets', 'blog');
 
 // Cache of public posts for link resolution
 const publicPosts: Map<string, { title: string; slug: string }> = new Map();
+
+// --- Leak gate ---------------------------------------------------------------
+// This publishes vault notes to a public website, and until now the only thing between
+// the two was one frontmatter field. The denylist deliberately does NOT live in this file:
+// portfolio-2025 is a PUBLIC repo, so a list of private project names committed here would
+// publish exactly what it exists to protect. It lives in the private vault and is shared
+// with the vault's own `sync-template`, because two copies of a denylist is two denylists
+// and the one nobody edits is the one that leaks.
+//
+// Only `ventures` + `people` apply here. `own` (the author's name, their published work) is
+// the byline on their own site, and `domain` is template-repo-specific -- blocking either
+// would fire on every post and the gate would be switched off within a day.
+//
+// A hit BLOCKS the post rather than scrubbing it: these are the user's own words, and a
+// silently mangled essay is worse than one that didn't publish.
+let privatePatterns: RegExp[] = [];
+
+function loadLeakGate(): void {
+    const file = path.join(OBSIDIAN_VAULT, 'scripts', 'private-names.json');
+    if (!fs.existsSync(file)) {
+        console.error(`Leak gate missing: ${file}`);
+        console.error('Refusing to publish anything that cannot be checked.');
+        process.exit(1);
+    }
+    const lists = JSON.parse(fs.readFileSync(file, 'utf-8'));
+    privatePatterns = ['ventures', 'people'].flatMap((c) => [
+        ...lists[c].any.map((p: string) => new RegExp(p, 'gi')),
+        ...lists[c].cased.map((p: string) => new RegExp(p, 'g')),
+    ]);
+}
+
+function leaks(text: string): string[] {
+    const hits = privatePatterns.flatMap((re) => [...text.matchAll(re)].map((m) => m[0]));
+    return [...new Set(hits)].sort();
+}
 
 // Find all markdown files in the vault
 function findMarkdownFiles(dir: string): string[] {
@@ -218,7 +255,7 @@ function convertToMDX(content: string, sourceFile: string): { content: string; i
 }
 
 // Process a single file
-function processFile(filePath: string): { success: boolean; outputPath?: string; images?: string[] } {
+function processFile(filePath: string): { success: boolean; outputPath?: string; images?: string[]; blocked?: string[] } {
     try {
         const fileContent = fs.readFileSync(filePath, 'utf-8');
         const { data: frontmatter, content } = matter(fileContent);
@@ -286,6 +323,12 @@ function processFile(filePath: string): { success: boolean; outputPath?: string;
         // Build final MDX file
         const mdxFile = matter.stringify(mdxContent, newFrontmatter);
 
+        // Gate the finished artifact -- title, summary and tags are published too.
+        const found = leaks(mdxFile);
+        if (found.length > 0) {
+            return { success: false, blocked: found };
+        }
+
         // Ensure output directory exists
         if (!fs.existsSync(PORTFOLIO_POSTS)) {
             fs.mkdirSync(PORTFOLIO_POSTS, { recursive: true });
@@ -332,6 +375,8 @@ function sync(): void {
         process.exit(1);
     }
 
+    loadLeakGate();
+
     const markdownFiles = findMarkdownFiles(OBSIDIAN_VAULT);
     console.log(`Found ${markdownFiles.length} markdown files in vault\n`);
 
@@ -344,8 +389,14 @@ function sync(): void {
     let synced = 0;
     const allImages: string[] = [];
 
+    const blocked: Array<{ file: string; found: string[] }> = [];
+
     for (const file of markdownFiles) {
         const result = processFile(file);
+
+        if (result.blocked) {
+            blocked.push({ file: path.relative(OBSIDIAN_VAULT, file), found: result.blocked });
+        }
 
         if (result.success) {
             const relativePath = path.relative(OBSIDIAN_VAULT, file);
@@ -365,7 +416,19 @@ function sync(): void {
         copyImages(allImages);
     }
 
-    console.log(`\nSync complete: ${synced} post(s) synced`);
+    // Reported last, so it is the final thing on screen after a pre-commit run.
+    // NOT a non-zero exit: nothing leaked (the file simply wasn't written), and a sync that
+    // fails the commit is how this pipeline froze the repo for two months once already.
+    if (blocked.length > 0) {
+        console.log(`\nBLOCKED ${blocked.length} post(s) — private names would have been published:`);
+        for (const b of blocked) {
+            console.log(`  ${b.file}`);
+            console.log(`      ${b.found.join(', ')}`);
+        }
+        console.log('  Not written. Edit the note or widen it, then re-run.');
+    }
+
+    console.log(`\nSync complete: ${synced} post(s) synced${blocked.length ? `, ${blocked.length} blocked` : ''}`);
 }
 
 // Run sync
