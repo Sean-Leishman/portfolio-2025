@@ -4,7 +4,7 @@ import Dot from '../components/Dot';
 
 const Posts = () => {
     return (
-        <Main imageSrc="/src/assets/pdga/witch_of_york.jpg">
+        <Main imageSrc="/src/assets/pdga/witch_of_york.webp">
             <h1 className="text-3xl font-extrabold">Posts<Dot /></h1>
             <PostsList />
         </Main>

@@ -103,7 +103,8 @@ export default defineConfig({
         // Without this the pre-render throws `SyntaxError: Unexpected token '?'` on every route and
         // silently emits empty <div id="root"></div> shells -- which is what the live site served.
         target: 'es2019',
-        sourcemap: true,
+        // Was `true`, which shipped a 5 MB .js.map to production on every deploy.
+        sourcemap: false,
         rollupOptions: {
             output: {
                 assetFileNames: (assetInfo) => {
@@ -136,7 +137,8 @@ export default defineConfig({
         viteStaticCopy({
             targets: [
                 {
-                    src: 'src/assets/**/*',
+                    // Was `**/*`, which also copied 78 WSL `:Zone.Identifier` turds into dist/.
+                    src: 'src/assets/**/*.{png,jpg,jpeg,gif,webp,avif,svg}',
                     dest: 'src/assets',
                 }
             ]

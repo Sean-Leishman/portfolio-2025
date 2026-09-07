@@ -46,7 +46,7 @@ function Projects() {
         */
 
     return (
-        <Main imageSrc="/src/assets/pdga/pointing.jpg">
+        <Main imageSrc="/src/assets/pdga/pointing.webp">
             <div className="flex justify-between align-center">
                 <h1 className="text-3xl font-extrabold">Projects<Dot /></h1>
             </div>

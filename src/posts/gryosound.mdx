@@ -8,12 +8,12 @@ ShowToc: false
 hideMeta: false
 Summary: "A mobile app that uses the sensors on a phone to create music in a fun and novel manner"
 weight: 1
-imageSrc: "/src/assets/pdga/flying_car.jpg"
+imageSrc: "/src/assets/pdga/flying_car.webp"
 ---
 
 > Source code can be found at <LinkTo to="https://github.com/Sean-Leishman/gyro-sound" text="Github" />
 
-<Figure className="w-auto max-h-100 mx-auto" src="/src/assets/playSound.png" />
+<Figure className="w-auto max-h-100 mx-auto" src="/src/assets/playSound.webp" />
 
 GyroSound was created as part a group project while on my exchange year in Singapore. We were tasked with coming up with an Android App which utilised the instrumentation available on the device. What came from this process was GyroSound.
 
@@ -43,13 +43,13 @@ The UI follows a functional approach as were particularly keen on creating a UI 
 
 #### Sound Selection & Editing Page
 
-<Figure className="w-auto max-h-100 mx-auto" src="/src/assets/editSound.png" />
+<Figure className="w-auto max-h-100 mx-auto" src="/src/assets/editSound.webp" />
 
 There is then the option of going to the 'Edit Sounds' page that allows the user to select how to offset the original pitch of a recorded sound as a baseline by either semitones or octaves. The record button then allows the user to record sounds and save them using a custom filename.
 
 ### Sound Storage
 
-<Figure className="w-auto max-h-100 mx-auto" src="/src/assets/recordSound.png" />
+<Figure className="w-auto max-h-100 mx-auto" src="/src/assets/recordSound.webp" />
 
 Over the lifetime of the project there was a large amount of experimentation in our data modelling and how data would persist across activities.
 
@@ -57,7 +57,7 @@ At first, there was the option of passing data through intents, in particular fr
 
 #### Android ViewModel & LiveData
 
-<Figure className="w-auto max-h-100 mx-auto" src="/src/assets/gyroArch.png" />
+<Figure className="w-auto max-h-100 mx-auto" src="/src/assets/gyroArch.webp" />
 
 As such we chose to implement the Android `ViewModel` and Android `LiveData`. These classes allow data to be persistent for the lifecycle of the data. The `ViewModel` is tied to the activity it was initialised in and as such the data is persistent across the child fragments of an activity. This method has the benefit of providing a clear separation of concerns between the state and view of the app. Memory leaks are also prevented by using `LiveData` due to how it is lifecycle aware and as such destroys the data that belongs to it when the activity it belongs to is destroyed.
 
@@ -99,7 +99,7 @@ As such, we receive the benefit of both classes with no memory leakage and persi
 
 ### Sound Playback & Modulation
 
-<Figure className="w-auto max-h-100 mx-auto" src="/src/assets/gyroSystem.png" />
+<Figure className="w-auto max-h-100 mx-auto" src="/src/assets/gyroSystem.webp" />
 
 The requirements of the project meant that it was necessary to identity a method that could be efficiently and with reasonable effectivess, change the pitch of the sound that is being played. We decided to use `SoundPool` due to it's inbuilt ability to modulate frequency.
 
@@ -140,13 +140,13 @@ fun changeFreq(newFreq: Float) { //sets the base frequency according to gyroscop
 
 ## App Testing
 
-<Figure className="w-auto max-h-100 mx-auto" src="/src/assets/profiler.png" />
+<Figure className="w-auto max-h-100 mx-auto" src="/src/assets/profiler.webp" />
 
 To experiment with testing and profiling the application the Android Profiler was used to monitor resource usage and performance throughout runtime.
 
 ### Main Page
 
-<Figure className="w-auto max-h-100 mx-auto" src="/src/assets/metrics.png" />
+<Figure className="w-auto max-h-100 mx-auto" src="/src/assets/metrics.webp" />
 
 The main page showcased constant CPU usage during all stages of activity due to measurement at constant time steps. While memory usage is at 144.5 MB which is not too bad considering that this is essentially a music playback software.
 

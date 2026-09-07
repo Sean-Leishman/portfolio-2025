@@ -14,10 +14,10 @@ const subsetProjects = projects.slice(0, 3);
 
 function Home() {
     return (
-        <Main imageSrc="/src/assets/pdga/daily_life_russian.jpg">
+        <Main imageSrc="/src/assets/pdga/daily_life_russian.webp">
             <div className="text-base font-semibold block mx-8">
                 <span className="mb-2 clear-none">
-                    <img src="/src/assets/pdga/dr-w.jpg" alt="W" className="w-24 h-auto mr-2 clear-none float-left" />
+                    <img src="/src/assets/pdga/dr-w.webp" alt="W" className="w-24 h-auto mr-2 clear-none float-left" />
                     elcome to my corner of the internet. I'm <span className="text-accent italic">Sean</span>.
                     This is where I discuss my projects, share my thoughts, and document my journey.
                     I have recently graduated with a degree in Computer Science from the University of Edinburgh and will be working as a Graduate Software Engineer at Squarepoint Capital.
