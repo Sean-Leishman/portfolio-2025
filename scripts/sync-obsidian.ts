@@ -2,6 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 import { fileURLToPath } from 'url';
 import matter from 'gray-matter';
 
@@ -9,7 +10,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Configuration
-const OBSIDIAN_VAULT = '/mnt/c/Users/leish/OneDrive/Documents/Obsidian Vault';
+// Was a hardcoded WSL path (/mnt/c/.../Obsidian Vault); it died silently on the move to Linux
+// and took the pre-commit hook down with it. Override with OBSIDIAN_VAULT if the vault moves again.
+const OBSIDIAN_VAULT = process.env.OBSIDIAN_VAULT ?? path.join(os.homedir(), 'Projects', 'Nordorn');
 const PORTFOLIO_POSTS = path.join(__dirname, '..', 'src', 'posts');
 const PORTFOLIO_ASSETS = path.join(__dirname, '..', 'src', 'assets', 'blog');
 
@@ -323,6 +326,11 @@ function copyImages(images: string[]): void {
 // Main sync function
 function sync(): void {
     console.log('Syncing Obsidian vault to portfolio...\n');
+
+    if (!fs.existsSync(OBSIDIAN_VAULT)) {
+        console.error(`Vault not found: ${OBSIDIAN_VAULT}\nSet OBSIDIAN_VAULT to the vault root.`);
+        process.exit(1);
+    }
 
     const markdownFiles = findMarkdownFiles(OBSIDIAN_VAULT);
     console.log(`Found ${markdownFiles.length} markdown files in vault\n`);
