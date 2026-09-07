@@ -5,7 +5,6 @@ import tailwindcss from '@tailwindcss/vite'
 import fs from 'fs';
 import path from 'path';
 import process from 'process';
-import { extractLink } from './src/lib/utils';
 
 import mdx from '@mdx-js/rollup';
 import { bundleMDX } from 'mdx-bundler';
@@ -62,7 +61,13 @@ async function generateItems(directory: string) {
                     tags: frontmatter.tags || [],
                     imageSrc: frontmatter.imageSrc || '',
                     imageAlt: frontmatter.imageAlt || '',
-                    link: extractLink(directory, frontmatter.title, frontmatter.date),
+                    // Was extractLink(directory, title, date), which put the raw title -- spaces,
+                    // colons and all -- straight into the URL. react-snap then wrote those routes to
+                    // disk with literal %20 in the directory name, so a browser asking for
+                    // /posts/Welcome%20Post decoded it to "Welcome Post", found nothing, and fell
+                    // through to the SPA shell. Every per-post pre-render was unreachable.
+                    // The sync script already computes this exact slug; the filename carries it.
+                    link: `/${directory}/${filename.replace(/\.mdx?$/, '')}`,
                     compiledMdx: code,
                 };
 
