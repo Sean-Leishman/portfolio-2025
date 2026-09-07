@@ -35,7 +35,6 @@ function Projects() {
                 externalLink={project.externalLink}
                 blogLink={project.blogLink}
                 date={project.date}
-                image={project.image}
                 githubLink={project.githubLink}
                 technologies={project.technologies}
             />
@@ -49,7 +48,7 @@ function Projects() {
     return (
         <Main imageSrc="/src/assets/pdga/pointing.jpg">
             <div className="flex justify-between align-center">
-                <h1 className="text-3xl font-bold">Projects<Dot /></h1>
+                <h1 className="text-3xl font-extrabold">Projects<Dot /></h1>
             </div>
             {projectComponents}
         </Main>

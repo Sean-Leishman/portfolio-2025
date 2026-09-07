@@ -17,7 +17,7 @@ function PostTopBar({ backLink, title, date, imageSrc, imageAlt, summary, hideSu
             {linkto}
             <Figure className="max-w-64 h-auto ml-0" src={imageSrc} alt={imageAlt} />
             <h2 className="text-xl font-bold mt-2 text-accent">{date}</h2>
-            <h1 className="text-2xl font-bold mb-2">{title}</h1>
+            <h1 className="text-2xl font-extrabold mb-2">{title}</h1>
             {summaryText}
         </div>
 

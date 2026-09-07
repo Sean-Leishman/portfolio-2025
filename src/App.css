@@ -42,7 +42,7 @@
 
     /* background dot grid */
     --dot: 32 21% 14%;
-    --dot-opacity: 0.14;
+    --dot-opacity: 0.26;
 
     --font-family-sans: 'Merriweather Sans', sans-serif;
     --font-family-serif: 'Merriweather', serif;
@@ -85,6 +85,11 @@ html {
     background-color: hsl(var(--background));
 }
 
+/* soften image edges so they dissolve into the dot grid instead of sitting on it */
+.fade-edges {
+    mask-image: radial-gradient(ellipse 92% 92% at 50% 50%, #000 55%, transparent 100%);
+}
+
 body {
     font-family: var(--font-family-serif);
     color: hsl(var(--foreground));
@@ -98,7 +103,6 @@ body {
     );
     background-size: 24px 24px;
     background-position: -1px -1px;
-    background-attachment: fixed;
 }
 
 #root {

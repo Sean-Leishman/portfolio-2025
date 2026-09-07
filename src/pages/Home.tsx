@@ -34,7 +34,7 @@ function Home() {
 
             </div>
 
-            <h1 className="text-2xl mt-8 font-bold text-center">PROJECTS<Dot /></h1>
+            <h1 className="text-2xl mt-8 mb-8 font-extrabold text-center">PROJECTS<Dot /></h1>
             <div className="flex flex-col items-center mb-16">
                 {subsetProjects.map((project, index) => (
                     <ProjectCard
@@ -44,7 +44,6 @@ function Home() {
                         externalLink={project.externalLink}
                         blogLink={project.blogLink}
                         date={project.date}
-                        image={project.image}
                         githubLink={project.githubLink}
                         technologies={project.technologies}
                     />
@@ -55,11 +54,11 @@ function Home() {
                 </div>
             </div>
             <div className="mb-16">
-                <h1 className="text-2xl font-bold text-center">EXPERIENCE<Dot /></h1>
+                <h1 className="text-2xl font-extrabold text-center">EXPERIENCE<Dot /></h1>
                 <ExperienceList />
             </div>
             <div className="">
-                <h1 className="text-2xl font-bold text-center">POSTS<Dot /></h1>
+                <h1 className="text-2xl font-extrabold text-center">POSTS<Dot /></h1>
                 <PostsList isHome={true} />
             </div>
         </Main >

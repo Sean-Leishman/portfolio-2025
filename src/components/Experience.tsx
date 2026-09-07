@@ -59,7 +59,7 @@ function Experience({
                     }
                 }}
             >
-                <h3 className="text-xl font-bold tracking-tight text-foreground group-hover:text-accent transition-colors">
+                <h3 className="text-xl font-extrabold tracking-tight text-foreground group-hover:text-accent transition-colors">
                     {role}
                 </h3>
                 <div className="mono text-xs text-muted-foreground flex items-center gap-2 shrink-0">

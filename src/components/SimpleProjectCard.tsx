@@ -1,6 +1,6 @@
 import LinkTo from './LinkTo';
 
-function SimpleProjectCard({ name, date, description, blogLink, externalLink, technologies, githubLink }: { name: string, date: string, description: string, blogLink: string | undefined, externalLink: string | undefined, image: string, technologies: string[], githubLink: string }) {
+function SimpleProjectCard({ name, date, description, blogLink, externalLink, technologies, githubLink }: { name: string, date: string, description: string, blogLink: string | undefined, externalLink: string | undefined, technologies: string[], githubLink: string }) {
     technologies = technologies || [];
 
     const externalLinkItem = externalLink ? <a href={externalLink} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">↗</a> : null;
