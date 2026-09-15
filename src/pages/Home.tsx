@@ -5,6 +5,7 @@ import ProjectCard from '../components/ProjectCard'
 import Dot from '../components/Dot'
 import ExperienceList from '../components/ExperienceList'
 import EmailLink from '../components/EmailLink'
+import Papers from '../components/Papers'
 
 import getProjects from '../lib/projects'
 
@@ -56,6 +57,10 @@ function Home() {
             <div className="mb-16">
                 <h1 className="text-2xl font-extrabold text-center">EXPERIENCE<Dot /></h1>
                 <ExperienceList />
+            </div>
+            <div className="mb-16">
+                <h1 className="text-2xl font-extrabold text-center">PAPERS<Dot /></h1>
+                <Papers />
             </div>
             <div className="">
                 <h1 className="text-2xl font-extrabold text-center">POSTS<Dot /></h1>

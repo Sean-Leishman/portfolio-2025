@@ -66,14 +66,16 @@ function Experience({
                     <img src={logo} alt="" className="w-4 h-4 object-contain rounded-sm" />
                     <span>{company} · {date}</span>
                     {canExpand && (
-                        <span className={`ml-1 transition-transform duration-300 ${isExpanded ? 'rotate-45' : ''}`}>+</span>
+                        <span className={`ml-1 transition-transform duration-150 ease-out ${isExpanded ? 'rotate-45' : ''}`}>+</span>
                     )}
                 </div>
             </div>
 
-            {/* grid 0fr -> 1fr animates to the content's real height, no max-h guessing */}
-            <div className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100 mt-6' : 'grid-rows-[0fr] opacity-0'}`}>
-                <div className="overflow-hidden">
+            {/* grid 0fr -> 1fr animates to the content's real height, no max-h guessing.
+                150ms ease-out, and the top gap lives inside the clipped box: as a toggled mt-6 it
+                snapped instantly while the height was still animating, which read as a jump. */}
+            <div className={`grid transition-[grid-template-rows,opacity] duration-150 ease-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                <div className="overflow-hidden"><div className="pt-6">
                     {sections.map((s) => (
                         <Section key={s.label} label={s.label} items={s.items} />
                     ))}
@@ -87,7 +89,7 @@ function Experience({
                             ))}
                         </div>
                     )}
-                </div>
+                </div></div>
             </div>
         </div>
     );
