@@ -5,7 +5,7 @@ import Dot from '../components/Dot';
 const Posts = () => {
     return (
         <Main imageSrc="/src/assets/pdga/witch_of_york.webp">
-            <h1 className="text-3xl font-extrabold text-left mb-6">Posts<Dot /></h1>
+            <h1 className="text-3xl font-extrabold tracking-tight text-left mb-6">Posts<Dot /></h1>
             <PostsList />
         </Main>
     )

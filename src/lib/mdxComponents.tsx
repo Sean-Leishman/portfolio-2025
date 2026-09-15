@@ -3,14 +3,10 @@ import type { MDXComponents } from 'mdx/types'
 export function useMDXComponents(components: MDXComponents): MDXComponents {
     return {
         ...components,
-        h1: (props) => (
-            <h1 className="text-3xl my-4 text-bold" {...props} />
-        ),
-        h2: (props) => (
-            <h2 className="my-2 text-2xl text-semibold" {...props} />
-        ),
-        h3: (props) => <h3 className="text-xl my-2 text-semibold" {...props} />,
-        h4: (props) => <h3 className="text-lg my-2 text-semibold" {...props} />,
+        h1: (props) => <h1 className="text-2xl font-extrabold tracking-tight mt-12 mb-3" {...props} />,
+        h2: (props) => <h2 className="text-xl font-extrabold tracking-tight mt-12 mb-3 pt-3 border-t border-border" {...props} />,
+        h3: (props) => <h3 className="text-lg font-bold mt-8 mb-2" {...props} />,
+        h4: (props) => <h4 className="eyebrow mt-6 mb-2" {...props} />,
         li: (props) => (
             <li className="text-base my-2 list-decimal list-inside ml-4" {...props} />
         ),

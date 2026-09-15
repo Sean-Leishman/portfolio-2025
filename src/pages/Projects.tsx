@@ -9,7 +9,7 @@ const projects = getProjects();
 function Projects() {
     return (
         <Main imageSrc="/src/assets/pdga/pointing.webp">
-            <h1 className="text-3xl font-extrabold text-left mb-6">Projects<Dot /></h1>
+            <h1 className="text-3xl font-extrabold tracking-tight text-left mb-6">Projects<Dot /></h1>
             <EntryList>
                 {projects.map((project) => (
                     <ProjectCard

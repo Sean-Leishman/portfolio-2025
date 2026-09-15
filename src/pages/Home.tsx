@@ -21,7 +21,7 @@ const subsetProjects = projects.slice(0, 3);
 function Section({ title, children }: { title: string, children: ReactNode }) {
     return (
         <section className="mt-16">
-            <h1 className="text-2xl font-extrabold text-center mb-6">{title}<Dot /></h1>
+            <h1 className="text-2xl font-extrabold text-center tracking-[0.12em] mb-6">{title}<Dot /></h1>
             <div className="border-t border-border pt-6">{children}</div>
         </section>
     )
