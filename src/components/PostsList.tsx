@@ -2,7 +2,6 @@ import { getPosts } from '../lib/content';
 
 import LinkTo from './LinkTo';
 import MoreLink from './MoreLink';
-import { EntryHeader, EntryList, EntryRow, titleLink } from './Entry';
 
 function PostsList({ isHome = false }: { isHome?: boolean }) {
     const allPosts = getPosts();
@@ -10,17 +9,15 @@ function PostsList({ isHome = false }: { isHome?: boolean }) {
     const posts = isHome ? allPosts.slice(0, 5) : allPosts;
 
     return (
-        <div>
-            <EntryList>
+        <div className="text-left">
+            <ul>
                 {posts.map((post) => (
-                    <EntryRow key={post.link}>
-                        <EntryHeader
-                            title={<LinkTo to={post.link} text={post.title} underline={false} customClassName={titleLink} />}
-                            meta={<span>{post.date}</span>}
-                        />
-                    </EntryRow>
+                    <li key={post.link} className="my-4 first:mt-0 flex items-center gap-2">
+                        <span className="text-muted-foreground italic">{post.date}</span>
+                        <LinkTo to={post.link} text={post.title} customClassName="font-semibold" />
+                    </li>
                 ))}
-            </EntryList>
+            </ul>
             <MoreLink remaining={allPosts.length - posts.length} noun="post" to="/posts" />
         </div>
     );

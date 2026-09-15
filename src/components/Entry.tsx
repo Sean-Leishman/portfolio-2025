@@ -24,15 +24,10 @@ export function EntryDescription({ children }: { children: ReactNode }) {
     return <p className="text-sm leading-relaxed text-foreground/80 mt-1">{children}</p>;
 }
 
+// Plain text, not pills: reads like a paper's author line.
 export function Tags({ items }: { items?: string[] }) {
     if (!items?.length) return null;
-    return (
-        <div className="flex flex-wrap gap-2 mt-3">
-            {items.map((item) => (
-                <span key={item} className="mono px-2.5 py-1 text-xs text-muted-foreground border border-border rounded-full">{item}</span>
-            ))}
-        </div>
-    );
+    return <p className="text-sm leading-relaxed text-muted-foreground mt-2">{items.join(' · ')}</p>;
 }
 
 // Title and meta links share these so every list hovers the same way.
