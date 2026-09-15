@@ -58,13 +58,12 @@ against the `dist/` output.
 - Projects are hardcoded in `src/lib/projects.tsx`, not synced
 - Asset paths in MDX use `/src/assets/...` and are copied through by
   `vite-plugin-static-copy`
-- `src/generated/` and `public/` are gitignored; `package-lock.json` is too
+- `src/generated/`, `public/`, `.env`, `.firebase/` are gitignored; `package-lock.json` is committed
+- Synced posts carry `source: obsidian`; the sync deletes those whose note is no longer public. Hand-written posts have no marker
 
 ## Gaps / unknowns
 
-- Obsidian vault path is hardcoded to a Windows OneDrive path under WSL
-  (`/mnt/c/Users/leish/...`); sync is single-machine
+- Obsidian vault path defaults to `~/Projects/Nordorn`, override with `OBSIDIAN_VAULT`
 - No tests
 - `.firebaserc` project id is misspelled (`portolfio-2c85b`); kept as-is
   because it matches the actual Firebase project
-- `vite-plugin-ssr` is in devDependencies but unused as far as I can see

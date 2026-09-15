@@ -25,4 +25,5 @@ dist-ssr
 
 public/
 src/generated/
-package-lock.json
+.env
+.firebase/

@@ -46,8 +46,15 @@ echo "$out" | grep -q "BLOCKED 1 post" || { echo "FAIL: leaky note was not block
 [ ! -f "$TMP/out/leaky-fixture.mdx" ]  || { echo "FAIL: leaky note was WRITTEN"; exit 1; }
 [   -f "$TMP/out/clean-fixture.mdx" ]  || { echo "FAIL: clean note was not published"; echo "$out"; exit 1; }
 
+# Orphans: a note made private loses its post; a hand-written post (no source marker) survives.
+printf -- '---\ntitle: Hand Written\n---\nNot from the vault.\n' > "$TMP/out/hand-written.mdx"
+sed -i 's/visibility: public/visibility: private/' "$TMP/vault/notes/clean.md"
+run >/dev/null
+[ ! -f "$TMP/out/clean-fixture.mdx" ] || { echo "FAIL: orphaned post was not removed"; exit 1; }
+[   -f "$TMP/out/hand-written.mdx" ]  || { echo "FAIL: hand-written post was deleted"; exit 1; }
+
 # Fail closed: no denylist must mean publish nothing, never publish everything.
 rm "$TMP/vault/scripts/private-names.json"
 if run >/dev/null 2>&1; then echo "FAIL: synced with no denylist present"; exit 1; fi
 
-echo "PASS: leak gate blocks private names, passes the byline, and fails closed."
+echo "PASS: leak gate blocks private names, passes the byline, removes orphans, and fails closed."

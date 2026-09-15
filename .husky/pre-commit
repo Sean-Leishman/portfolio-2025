@@ -4,4 +4,5 @@
 npm run sync
 
 # Stage any synced files
-git add src/posts/*.mdx src/assets/blog/* 2>/dev/null || true
+# -A so removed orphans are staged as deletions too
+git add -A src/posts src/assets/blog 2>/dev/null || true

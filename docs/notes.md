@@ -68,11 +68,22 @@ when documentation was written:
   it here is the literal "stage everything" instruction, but a follow-up
   cleanup is warranted.
 
-## Suggested follow-ups (not done)
+## Suggested follow-ups (done 2026-09-15)
 
-- Add `.env`, `.firebase/`, and `dist/` to `.gitignore`. (`dist/` is already
-  there; the other two are not.)
-- Un-ignore `package-lock.json` for reproducible installs.
-- Pull the Obsidian vault path into an env var so the sync works on more
-  than one machine.
-- Decide whether `vite-plugin-ssr` is needed; remove if not.
+- `.env` and `.firebase/` are now gitignored and untracked. `.env` (the email)
+  remains in history; the repo is public, so treat that address as public.
+- `package-lock.json` is committed.
+- Vault path comes from `OBSIDIAN_VAULT` (default `~/Projects/Nordorn`).
+- Removed `vite-plugin-ssr`, `node-gyp`, `process`, `mdx`. Kept `esbuild`:
+  it is a peer dependency of `mdx-bundler`.
+
+### 2026-09-15 — orphan cleanup in the sync
+
+Synced posts now carry `source: obsidian` in frontmatter. After each run the
+sync deletes any `src/posts/*.mdx` with that marker whose slug is not a public
+note in the vault. Most posts (chess, et-tu-uv, gyrosound, stocktrend,
+welcome-post) are hand-written with no marker, so they are never touched — a
+naive "not in vault => delete" would have wiped them. Blocked/failed notes stay
+in the public index, so their last good version is kept. The pre-commit hook
+now uses `git add -A` so deletions get staged. Orphaned images are not swept.
+Covered by `scripts/test-leak-gate.sh`.

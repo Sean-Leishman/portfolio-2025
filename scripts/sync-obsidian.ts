@@ -307,6 +307,8 @@ function processFile(filePath: string): { success: boolean; outputPath?: string;
             hideMeta: false,
             Summary: frontmatter.summary || '',
             weight: 1,
+            // Marks the file as sync-owned, so removeOrphans may delete it. Hand-written posts lack it.
+            source: 'obsidian',
         };
 
         if (frontmatter.imageSrc) {
@@ -366,6 +368,21 @@ function copyImages(images: string[]): void {
     }
 }
 
+// Delete sync-owned posts whose note is no longer public (made private, renamed, or deleted).
+// Blocked or failed notes are still in publicPosts, so their last good version stays up.
+// ponytail: orphaned images in src/assets/blog are left behind; sweep them if the folder bloats.
+function removeOrphans(): void {
+    if (!fs.existsSync(PORTFOLIO_POSTS)) return;
+    const live = new Set([...publicPosts.values()].map((p) => `${p.slug}.mdx`));
+    for (const name of fs.readdirSync(PORTFOLIO_POSTS)) {
+        const file = path.join(PORTFOLIO_POSTS, name);
+        if (!name.endsWith('.mdx') || live.has(name)) continue;
+        if (matter(fs.readFileSync(file, 'utf-8')).data.source !== 'obsidian') continue;
+        fs.unlinkSync(file);
+        console.log(`Removed: ${name} (no longer public in the vault)`);
+    }
+}
+
 // Main sync function
 function sync(): void {
     console.log('Syncing Obsidian vault to portfolio...\n');
@@ -409,6 +426,8 @@ function sync(): void {
             }
         }
     }
+
+    removeOrphans();
 
     // Copy all images
     if (allImages.length > 0) {
