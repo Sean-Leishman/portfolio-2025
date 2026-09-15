@@ -8,7 +8,7 @@ function Section({ label, items }: { label: string; items: string[] }) {
             <p className="eyebrow mb-2">{label}</p>
             <ul className="space-y-1">
                 {items.map((item, i) => (
-                    <li key={i} className="text-sm leading-relaxed text-foreground/80 pl-4 -indent-4 before:content-['—'] before:mr-2 before:text-muted-foreground">
+                    <li key={i} className="text-sm leading-normal text-foreground/80 pl-4 -indent-4 before:content-['—'] before:mr-2 before:text-muted-foreground">
                         {item}
                     </li>
                 ))}

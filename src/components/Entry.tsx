@@ -21,13 +21,13 @@ export function EntryHeader({ title, meta, className = '', ...rest }: { title: R
 }
 
 export function EntryDescription({ children }: { children: ReactNode }) {
-    return <p className="text-base leading-relaxed text-foreground/80 mt-1 max-w-[68ch]">{children}</p>;
+    return <p className="text-base leading-normal text-foreground/80 mt-1 max-w-[68ch]">{children}</p>;
 }
 
 // Plain text, not pills: reads like a paper's author line.
 export function Tags({ items }: { items?: string[] }) {
     if (!items?.length) return null;
-    return <p className="text-sm leading-relaxed text-muted-foreground mt-2">{items.join(' · ')}</p>;
+    return <p className="text-sm leading-normal text-muted-foreground mt-2">{items.join(' · ')}</p>;
 }
 
 // Title and meta links share these so every list hovers the same way.
