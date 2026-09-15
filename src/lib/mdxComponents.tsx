@@ -18,7 +18,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         ul: (props) => <ul className="list-disc mb-6" {...props} />,
         a: (props) => <a {...props} />,
         pre: (props) => <pre className="code-block" {...props} />,
-        p: (props) => <p className="text-base leading-relaxed mb-4" {...props} />,
+        p: (props) => <p className="text-base leading-relaxed mb-4 max-w-[68ch]" {...props} />,
         strong: (props) => <strong className="font-bold" {...props} />,
         code: (props) => {
             const isInline =
