@@ -18,9 +18,9 @@ const papers = [
 
 function Papers() {
     return (
-        <ul className="text-left border-b border-border">
+        <ul className="text-left divide-y divide-border">
             {papers.map((paper) => (
-                <li key={paper.link} className="border-t border-border py-6">
+                <li key={paper.link} className="py-6 first:pt-0">
                     <a href={paper.link} target="_blank" rel="noopener noreferrer" className="text-lg font-extrabold tracking-tight text-foreground hover:text-accent transition-colors">
                         {paper.title}
                     </a>

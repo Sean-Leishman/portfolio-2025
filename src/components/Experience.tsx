@@ -45,7 +45,7 @@ function Experience({
     const canExpand = sections.length > 0 || !!skills?.length;
 
     return (
-        <div className="border-t border-border py-6">
+        <div className="py-6 first:pt-0">
             <div
                 className={`flex items-baseline justify-between gap-x-6 gap-y-2 flex-wrap ${canExpand ? 'cursor-pointer group' : ''}`}
                 onClick={() => canExpand && setIsExpanded(!isExpanded)}

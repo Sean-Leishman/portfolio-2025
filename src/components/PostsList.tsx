@@ -15,7 +15,7 @@ function PostsList({ isHome = false }: { isHome?: boolean }) {
         <div className="">
             <ul className="list-disc">
                 {posts.map((post, index) => (
-                    <li key={index} className="my-4 list-none">
+                    <li key={index} className="my-4 first:mt-0 list-none">
                         <TableEntry
                             title={post.title}
                             date={post.date}

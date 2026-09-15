@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import LinkTo from '../components/LinkTo'
 import Main from '../components/Main'
 import PostsList from '../components/PostsList'
@@ -12,6 +13,17 @@ import getProjects from '../lib/projects'
 const projects = getProjects();
 const subsetProjects = projects.slice(0, 3);
 
+
+// One shape for every home section: heading, fixed gap, a single rule, content. Lists draw their
+// own dividers only between rows, so no rule ever sits against a heading or doubles up.
+function Section({ title, children }: { title: string, children: ReactNode }) {
+    return (
+        <section className="mt-16">
+            <h1 className="text-2xl font-extrabold text-center mb-6">{title}<Dot /></h1>
+            <div className="border-t border-border pt-6">{children}</div>
+        </section>
+    )
+}
 
 function Home() {
     return (
@@ -35,8 +47,8 @@ function Home() {
 
             </div>
 
-            <h1 className="text-2xl mt-8 mb-8 font-extrabold text-center">PROJECTS<Dot /></h1>
-            <div className="flex flex-col items-center mb-16">
+            <Section title="PROJECTS">
+            <div className="flex flex-col items-center">
                 {subsetProjects.map((project, index) => (
                     <ProjectCard
                         key={index}
@@ -54,18 +66,10 @@ function Home() {
                     <LinkTo customClassName="text-center" to="/projects" text=" View all projects here" />
                 </div>
             </div>
-            <div className="mb-16">
-                <h1 className="text-2xl font-extrabold text-center">EXPERIENCE<Dot /></h1>
-                <ExperienceList />
-            </div>
-            <div className="mb-16">
-                <h1 className="text-2xl font-extrabold text-center">PAPERS<Dot /></h1>
-                <Papers />
-            </div>
-            <div className="">
-                <h1 className="text-2xl font-extrabold text-center">POSTS<Dot /></h1>
-                <PostsList isHome={true} />
-            </div>
+            </Section>
+            <Section title="EXPERIENCE"><ExperienceList /></Section>
+            <Section title="PAPERS"><Papers /></Section>
+            <Section title="POSTS"><PostsList isHome={true} /></Section>
         </Main >
     )
 }
