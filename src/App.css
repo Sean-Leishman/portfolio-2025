@@ -40,9 +40,8 @@
     --card: 0, 0%, 100%;
     --card-foreground: 32, 21%, 14%;
 
-    /* background dot grid */
-    --dot: 32 21% 14%;
-    --dot-opacity: 0.26;
+    /* paper grain: SVG noise tinted brown; colour can't come from a var inside a data URI, hence one per theme */
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.2 0 0 0 0 0.15 0 0 0 0 0.1 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 
     --font-family-sans: 'Merriweather Sans', sans-serif;
     --font-family-serif: 'Merriweather', serif;
@@ -75,8 +74,7 @@
     --card: 30, 7%, 12%;
     --card-foreground: 40, 14%, 90%;
 
-    --dot: 40 20% 80%;
-    --dot-opacity: 0.13;
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.9 0 0 0 0 0.85 0 0 0 0 0.8 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 
     color-scheme: dark;
 }
@@ -85,7 +83,7 @@ html {
     background-color: hsl(var(--background));
 }
 
-/* soften image edges so they dissolve into the dot grid instead of sitting on it */
+/* soften image edges so they dissolve into the paper instead of sitting on it */
 .fade-edges {
     mask-image: radial-gradient(ellipse 92% 92% at 50% 50%, #000 55%, transparent 100%);
 }
@@ -95,14 +93,9 @@ body {
     color: hsl(var(--foreground));
     min-height: 100vh;
 
-    /* dot grid, painted straight onto the body over the background colour */
+    /* paper grain, painted straight onto the body over the background colour */
     background-color: hsl(var(--background));
-    background-image: radial-gradient(
-        hsl(var(--dot) / var(--dot-opacity)) 1px,
-        transparent 1px
-    );
-    background-size: 24px 24px;
-    background-position: -1px -1px;
+    background-image: var(--grain);
 }
 
 #root {
