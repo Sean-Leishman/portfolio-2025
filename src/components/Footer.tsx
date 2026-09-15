@@ -1,13 +1,10 @@
+// Same small mono as the other metadata on the page.
 function Footer() {
     return (
-        <div>
-            <footer className="py-4 text-muted-foreground italic text-sm mt-32">
-                <div className="container mx-auto text-center">
-                    <p>Time for me to go to bed</p>
-                    <p>Sean.</p>
-                </div>
-            </footer>
-        </div>
+        <footer className="mono text-xs text-muted-foreground text-center py-10 mt-16">
+            {`Sean Leishman · ${new Date().getFullYear()} · `}
+            <a href="https://github.com/Sean-Leishman" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">GitHub ↗</a>
+        </footer>
     )
 }
 

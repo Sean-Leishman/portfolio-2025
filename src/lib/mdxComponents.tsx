@@ -12,13 +12,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         h3: (props) => <h3 className="text-xl my-2 text-semibold" {...props} />,
         h4: (props) => <h3 className="text-lg my-2 text-semibold" {...props} />,
         li: (props) => (
-            <li className="text-sm my-2 list-decimal list-inside ml-4" {...props} />
+            <li className="text-base my-2 list-decimal list-inside ml-4" {...props} />
         ),
         ol: (props) => <ol className="list-decimal my-8" {...props} />,
         ul: (props) => <ul className="list-disc mb-6" {...props} />,
         a: (props) => <a {...props} />,
         pre: (props) => <pre className="code-block" {...props} />,
-        p: (props) => <p className="text-sm mb-4" {...props} />,
+        p: (props) => <p className="text-base leading-relaxed mb-4" {...props} />,
         strong: (props) => <strong className="font-bold" {...props} />,
         code: (props) => {
             const isInline =

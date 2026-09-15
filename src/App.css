@@ -141,7 +141,8 @@ body {
 }
 
 p {
-    font-weight: 500;
+    /* was 500: Merriweather at 500 made every paragraph read heavier than the headings it sat under */
+    font-weight: 400;
 }
 
 /* small uppercase mono label used for section eyebrows and metadata */
@@ -171,19 +172,45 @@ p {
     text-align: left;
     background: hsl(var(--muted));
     border: 1px solid hsl(var(--border));
-    border-radius: 0.375rem;
+    border-radius: 0.75rem;
     padding: 1rem 1.25rem;
     margin-bottom: 1rem;
     overflow-x: auto;
     white-space: pre;
 }
 
-/* a highlighted block is a .code-block inside MDX's <pre>: only the outer one draws the panel */
+/* copy button sits in the panel's top-right; the panel scrolls, the button must not */
+.code-block {
+    position: relative;
+}
+
+.code-copy {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    /* visible by default: hover-only would hide it on touch devices */
+    opacity: 0.55;
+    transition: opacity 150ms ease-out;
+    cursor: pointer;
+}
+
+.code-block:hover .code-copy,
+.code-copy:focus-visible {
+    opacity: 1;
+}
+
+/* a highlighted block is a .code-block inside MDX's <pre>: only the outer one draws the panel,
+   and the inner one does the scrolling so the copy button stays pinned to the panel */
 .code-block .code-block {
     background: none;
     border: 0;
     padding: 0;
     margin: 0;
+    overflow-x: auto;
+}
+
+.code-block:has(.code-block) {
+    overflow: visible;
 }
 
 .code-block code {

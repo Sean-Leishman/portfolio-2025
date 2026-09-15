@@ -32,6 +32,7 @@ function mergeText(nodes: CodeNode[]): CodeNode[] {
 const mergedRenderer = ({ rows, stylesheet, useInlineStyles }: any) =>
     mergeText(rows).map((node, i) => createElement({ node: node as any, stylesheet, useInlineStyles, key: `code-segment-${i}` }));
 
+import CodeBlock from './CodeBlock';
 import LinkTo from './LinkTo';
 import Figure from './Figure';
 
@@ -43,7 +44,8 @@ function code({ className, children, ...properties }: any) {
         // nothing -- sentences silently lost their subject. It is inline, so <code>, not <pre>.
         return <code className="px-1 py-0.5 rounded bg-black/5 dark:bg-white/10" {...properties}>{children}</code>;
     }
-    return <SyntaxHighlighter
+    const source = Array.isArray(children) ? children.join('') : String(children ?? '');
+    return <CodeBlock code={source}><SyntaxHighlighter
         language={match[1]}
         PreTag="div"
         renderer={mergedRenderer}
@@ -52,7 +54,7 @@ function code({ className, children, ...properties }: any) {
         useInlineStyles={false}
         className="code-block"
         {...properties}>
-        {children} </SyntaxHighlighter>
+        {children} </SyntaxHighlighter></CodeBlock>
 
 }
 

@@ -30,7 +30,7 @@ function Section({ title, children }: { title: string, children: ReactNode }) {
 function Home() {
     return (
         <Main imageSrc="/src/assets/pdga/daily_life_russian.webp">
-            <div className="text-base font-semibold block mx-8">
+            <div className="text-base block mx-8">
                 <span className="mb-2 clear-none">
                     <img src="/src/assets/pdga/dr-w.webp" alt="W" className="w-24 h-auto mr-2 clear-none float-left" />
                     elcome to my corner of the internet. I'm <span className="text-accent italic">Sean</span>.

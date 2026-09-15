@@ -21,7 +21,7 @@ export function EntryHeader({ title, meta, className = '', ...rest }: { title: R
 }
 
 export function EntryDescription({ children }: { children: ReactNode }) {
-    return <p className="text-sm leading-relaxed text-foreground/80 mt-1">{children}</p>;
+    return <p className="text-base leading-relaxed text-foreground/80 mt-1">{children}</p>;
 }
 
 // Plain text, not pills: reads like a paper's author line.
