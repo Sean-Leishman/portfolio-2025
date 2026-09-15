@@ -47,7 +47,10 @@ function code({ className, children, ...properties }: any) {
         language={match[1]}
         PreTag="div"
         renderer={mergedRenderer}
-        className="mb-4"
+        // classes, not inline styles: the hljs themes are single-theme and white, so the colours
+        // live in App.css where they can follow the site's tokens in both light and dark mode.
+        useInlineStyles={false}
+        className="code-block"
         {...properties}>
         {children} </SyntaxHighlighter>
 

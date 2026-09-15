@@ -64,7 +64,7 @@ function Home() {
                     />
                 ))}
             </EntryList>
-            <MoreLink remaining={projects.length - subsetProjects.length} noun="project" to="/projects" />
+            <MoreLink remaining={projects.length - subsetProjects.length} noun="project" to="/projects" centered />
             </Section>
             <Section title="EXPERIENCE"><ExperienceList /></Section>
             <Section title="PAPERS"><Papers /></Section>

@@ -50,30 +50,30 @@ First off, we find all valid moves for pieces without checking whether the oppos
 
 ```[python]
 def update_valid_moves(self, board):
-        """
-        Update valid moves
-        :param board: List[Piece]
-            list of pieces on current board
-        :return:
-        """
-        self.valid_moves = []
-        for i in self.moves:
-            copy = self.pos[:]
-            valid = True
-            once = True
-            while i[0] + copy[0] >= 0 and i[0] + copy[0] < 8 and i[1] + copy[1] >= 0 and i[1] + copy[1] < 8 and valid:
-                if valid and not once:
-                    valid = False
-                for j in board:
-                    if [i[0] + copy[0], i[1] + copy[1]] == j.get_pos() and once:
-                        if j.get_color() == self.get_color():
-                            valid = False
-                        else:
-                            valid = True
-                            once = False
-                if valid:
-                    self.valid_moves.append([copy[0] + i[0], copy[1] + i[1]])
-                copy = [copy[0] + i[0], copy[1] + i[1]]
+    """
+    Update valid moves
+    :param board: List[Piece]
+        list of pieces on current board
+    :return:
+    """
+    self.valid_moves = []
+    for i in self.moves:
+        copy = self.pos[:]
+        valid = True
+        once = True
+        while i[0] + copy[0] >= 0 and i[0] + copy[0] < 8 and i[1] + copy[1] >= 0 and i[1] + copy[1] < 8 and valid:
+            if valid and not once:
+                valid = False
+            for j in board:
+                if [i[0] + copy[0], i[1] + copy[1]] == j.get_pos() and once:
+                    if j.get_color() == self.get_color():
+                        valid = False
+                    else:
+                        valid = True
+                        once = False
+            if valid:
+                self.valid_moves.append([copy[0] + i[0], copy[1] + i[1]])
+            copy = [copy[0] + i[0], copy[1] + i[1]]
 ```
 
 This is run for each instance of the Piece class and iterates for it's unit value of it's room (e.g. for bishop [[1,1], [-1,-1], [1,-1], [-1,1]]) and then iterate from that point onwords in those directions until encountering another piece. It is important to note that I have left out implemenetations for knight, pawn and king for brevity but it follows a similar pattern. However, you may notice that we pass a reference to `board` a list of pieces and as such there is no seperation of concerns as this method of `Piece` makes it unclear where the responsibility lies for piece generation.
@@ -83,55 +83,55 @@ The errors also go further on from a conceptual level to more efficiency based e
 
 ```[python]
 def validate_check(self,color):
-        """
-        Remove moves that result in current coloured King going into check
+    """
+    Remove moves that result in current coloured King going into check
 
-        :param color: int
-            represents color of piece to validate
-        :return:
-        """
-        copy_board = deepcopy(self)
-        pieces = copy_board.pieces[:]
-        for piece in pieces:
-            if piece.color[0] == color:
-                valid_moves = deepcopy(piece.valid_moves)
-                # 4,5,6
-                # 4,3,2
-                if isinstance(piece, King):
-                    bi_castling = [list(range(piece.pos[0],x[3][0], (x[0] - piece.pos[0])//abs(x[0] - piece.pos[0]))) for x in valid_moves if len(x) > 2]
-                    for idx,direction in enumerate(bi_castling):
-                        for position in direction:
-                            original_pos = deepcopy(piece.pos)
-                            copy_board.make_move_pos(original_pos, [position, original_pos[1]])
-                            copy_board.init_valid(color, True)
-                            future_check = copy_board.get_set_check(color)
-                            copy_board.make_move_pos([position, original_pos[1]], original_pos)
-                            copy_board.init_valid(color, True)
-                            if future_check:
-                                for i in self.pieces:
-                                    if i.__class__.__name__ == piece.__class__.__name__ and i.color == piece.color and i.pos == piece.pos:
-                                        castle_move = [x for x in valid_moves if len(x) > 2]
-                                        move = castle_move[idx]
-                                        for x in i.valid_moves:
-                                            if [x[0],x[1]] == move[:2]:
-                                                i.valid_moves.remove(move)
+    :param color: int
+        represents color of piece to validate
+    :return:
+    """
+    copy_board = deepcopy(self)
+    pieces = copy_board.pieces[:]
+    for piece in pieces:
+        if piece.color[0] == color:
+            valid_moves = deepcopy(piece.valid_moves)
+            # 4,5,6
+            # 4,3,2
+            if isinstance(piece, King):
+                bi_castling = [list(range(piece.pos[0],x[3][0], (x[0] - piece.pos[0])//abs(x[0] - piece.pos[0]))) for x in valid_moves if len(x) > 2]
+                for idx,direction in enumerate(bi_castling):
+                    for position in direction:
+                        original_pos = deepcopy(piece.pos)
+                        copy_board.make_move_pos(original_pos, [position, original_pos[1]])
+                        copy_board.init_valid(color, True)
+                        future_check = copy_board.get_set_check(color)
+                        copy_board.make_move_pos([position, original_pos[1]], original_pos)
+                        copy_board.init_valid(color, True)
+                        if future_check:
+                            for i in self.pieces:
+                                if i.__class__.__name__ == piece.__class__.__name__ and i.color == piece.color and i.pos == piece.pos:
+                                    castle_move = [x for x in valid_moves if len(x) > 2]
+                                    move = castle_move[idx]
+                                    for x in i.valid_moves:
+                                        if [x[0],x[1]] == move[:2]:
+                                            i.valid_moves.remove(move)
 
 
-                for move in valid_moves:
-                    original_pos = deepcopy(piece.pos)
-                    moved, removed_piece = copy_board.move_piece(piece.pos, move)
-                    if len(move) > 2:
-                        if move[2] == "CASTLING":
-                            status = move[2]
-                    copy_board.init_valid(color, True)
-                    future_check = copy_board.get_set_check(color)
-                    copy_board.reverse_move(move, original_pos, removed_piece)
-                    copy_board.init_valid(color, True)
-                    if future_check:
-                        for i in self.pieces:
-                            if i.__class__.__name__ == piece.__class__.__name__ and i.color == piece.color and i.pos == piece.pos:
-                                if (move in i.valid_moves):
-                                    i.valid_moves.remove(move)
+            for move in valid_moves:
+                original_pos = deepcopy(piece.pos)
+                moved, removed_piece = copy_board.move_piece(piece.pos, move)
+                if len(move) > 2:
+                    if move[2] == "CASTLING":
+                        status = move[2]
+                copy_board.init_valid(color, True)
+                future_check = copy_board.get_set_check(color)
+                copy_board.reverse_move(move, original_pos, removed_piece)
+                copy_board.init_valid(color, True)
+                if future_check:
+                    for i in self.pieces:
+                        if i.__class__.__name__ == piece.__class__.__name__ and i.color == piece.color and i.pos == piece.pos:
+                            if (move in i.valid_moves):
+                                i.valid_moves.remove(move)
 
 ```
 
@@ -156,28 +156,28 @@ Think about this first, rather than iterating through the rows and then columns 
 
 ```[python]
 def initialise_boards(self):
-        self.piece_bb[Color.WHITE][Piece.PAWN] = np.uint64(0x000000000000FF00)
-        self.piece_bb[Color.WHITE][Piece.KNIGHT] = np.uint64(0x0000000000000042)
-        self.piece_bb[Color.WHITE][Piece.BISHOP] = np.uint64(0x0000000000000024)
-        self.piece_bb[Color.WHITE][Piece.ROOK] = np.uint64(0x0000000000000081)
-        self.piece_bb[Color.WHITE][Piece.QUEEN] = np.uint64(0x0000000000000008)
-        self.piece_bb[Color.WHITE][Piece.KING] = np.uint64(0x0000000000000010)
+    self.piece_bb[Color.WHITE][Piece.PAWN] = np.uint64(0x000000000000FF00)
+    self.piece_bb[Color.WHITE][Piece.KNIGHT] = np.uint64(0x0000000000000042)
+    self.piece_bb[Color.WHITE][Piece.BISHOP] = np.uint64(0x0000000000000024)
+    self.piece_bb[Color.WHITE][Piece.ROOK] = np.uint64(0x0000000000000081)
+    self.piece_bb[Color.WHITE][Piece.QUEEN] = np.uint64(0x0000000000000008)
+    self.piece_bb[Color.WHITE][Piece.KING] = np.uint64(0x0000000000000010)
 
-        self.piece_bb[Color.BLACK][Piece.PAWN] = np.uint64(0x00FF000000000000)
-        self.piece_bb[Color.BLACK][Piece.KNIGHT] = np.uint64(0x4200000000000000)
-        self.piece_bb[Color.BLACK][Piece.BISHOP] = np.uint64(0x2400000000000000)
-        self.piece_bb[Color.BLACK][Piece.ROOK] = np.uint64(0x8100000000000000)
-        self.piece_bb[Color.BLACK][Piece.QUEEN] = np.uint64(0x0800000000000000)
-        self.piece_bb[Color.BLACK][Piece.KING] = np.uint64(0x1000000000000000)
+    self.piece_bb[Color.BLACK][Piece.PAWN] = np.uint64(0x00FF000000000000)
+    self.piece_bb[Color.BLACK][Piece.KNIGHT] = np.uint64(0x4200000000000000)
+    self.piece_bb[Color.BLACK][Piece.BISHOP] = np.uint64(0x2400000000000000)
+    self.piece_bb[Color.BLACK][Piece.ROOK] = np.uint64(0x8100000000000000)
+    self.piece_bb[Color.BLACK][Piece.QUEEN] = np.uint64(0x0800000000000000)
+    self.piece_bb[Color.BLACK][Piece.KING] = np.uint64(0x1000000000000000)
 
-        for p in Piece:
-            for c in Color:
-                self.color_occ[c] |= self.piece_bb[c][p]
+    for p in Piece:
+        for c in Color:
+            self.color_occ[c] |= self.piece_bb[c][p]
 
-        self.occ = self.color_occ[Color.WHITE] | self.color_occ[Color.BLACK]
-        self.format_board.update_board(self.piece_bb, self.king_in_check)
-        self.legal_moves = self.find_moves()
-        self.format_board.update_legal_moves(self.legal_moves)
+    self.occ = self.color_occ[Color.WHITE] | self.color_occ[Color.BLACK]
+    self.format_board.update_board(self.piece_bb, self.king_in_check)
+    self.legal_moves = self.find_moves()
+    self.format_board.update_legal_moves(self.legal_moves)
 ```
 
 In this code for example, bitboards for each piece are stored as a matrix so that we can access each piece bitboard by that pieces colour and piece type. Other bitboards are also in use such as the locations of all pieces on the board, and then the locations of pieces in a colour specific manner.
@@ -195,27 +195,27 @@ Let's take a look at Knights!
 
 ```[python]
 def generate_knight_moves(self):
-        bb = np.zeros(64, dtype=np.uint64)
-        knight_pos = np.uint64(1)
+    bb = np.zeros(64, dtype=np.uint64)
+    knight_pos = np.uint64(1)
 
-        for i in range(64):
-            knight_clip_file_a_b = knight_pos & ~self.clear_files[0] & ~self.clear_files[1]
-            knight_clip_file_a = knight_pos & ~self.clear_files[0]
-            knight_clip_file_g_h = knight_pos & ~self.clear_files[6] & ~self.clear_files[7]
-            knight_clip_file_h = knight_pos & ~self.clear_files[7]
+    for i in range(64):
+        knight_clip_file_a_b = knight_pos & ~self.clear_files[0] & ~self.clear_files[1]
+        knight_clip_file_a = knight_pos & ~self.clear_files[0]
+        knight_clip_file_g_h = knight_pos & ~self.clear_files[6] & ~self.clear_files[7]
+        knight_clip_file_h = knight_pos & ~self.clear_files[7]
 
-            wwn = knight_clip_file_a_b << np.uint8(6)
-            wnn = knight_clip_file_a << np.uint8(15)
-            een = knight_clip_file_g_h << np.uint8(10)
-            enn = knight_clip_file_h << np.uint8(17)
-            ees = knight_clip_file_g_h >> np.uint8(6)
-            ess = knight_clip_file_h >> np.uint8(15)
-            wws = knight_clip_file_a_b >> np.uint8(10)
-            wss = knight_clip_file_a >> np.uint8(17)
+        wwn = knight_clip_file_a_b << np.uint8(6)
+        wnn = knight_clip_file_a << np.uint8(15)
+        een = knight_clip_file_g_h << np.uint8(10)
+        enn = knight_clip_file_h << np.uint8(17)
+        ees = knight_clip_file_g_h >> np.uint8(6)
+        ess = knight_clip_file_h >> np.uint8(15)
+        wws = knight_clip_file_a_b >> np.uint8(10)
+        wss = knight_clip_file_a >> np.uint8(17)
 
-            bb[i] = wwn | wnn | een | enn | wws | wss | ees | ess
-            knight_pos = knight_pos << np.uint8(1)
-        return bb
+        bb[i] = wwn | wnn | een | enn | wws | wss | ees | ess
+        knight_pos = knight_pos << np.uint8(1)
+    return bb
 ```
 
 `bb` is the list which contains moves from each position. So we check each position in that list. It is important to note that this will not error if we go beyond a certain row or column (only if going before 0 or beyond 2^64) and so we must be rigourous in checking. There are eight possible moves a knight can make.
@@ -225,37 +225,37 @@ def generate_knight_moves(self):
 As such, we require clipping when the knight will overflow the row, so for example, we should remove knights on row a when the knight is making moves westwards. As such, we should do a bitwise AND between our knight bitboard and a bitboard that contains 1s from index 8 onwards. So for example if our knight is on row A we would have:
 
 ```[python]
-            | 0 0 0 0 0 0 0 0 |     | 0 1 1 1 1 1 1 1 |     | 0 0 0 0 0 0 0 0 |
-            | 0 0 0 0 0 0 0 0 |     | 0 1 1 1 1 1 1 1 |     | 0 0 0 0 0 0 0 0 |
-            | 0 0 0 0 0 0 0 0 |     | 0 1 1 1 1 1 1 1 |     | 0 0 0 0 0 0 0 0 |
-            | 0 0 0 0 0 0 0 0 |  X  | 0 1 1 1 1 1 1 1 |  =  | 0 0 0 0 0 0 0 0 |
-            | 1 0 0 0 0 0 0 0 |     | 0 1 1 1 1 1 1 1 |     | 0 0 0 0 0 0 0 0 |
-            | 0 0 0 0 0 0 0 0 |     | 0 1 1 1 1 1 1 1 |     | 0 0 0 0 0 0 0 0 |
-            | 0 0 0 0 0 0 0 0 |     | 0 1 1 1 1 1 1 1 |     | 0 0 0 0 0 0 0 0 |
-            | 0 0 0 0 0 0 0 0 |     | 0 1 1 1 1 1 1 1 |     | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |     | 0 1 1 1 1 1 1 1 |     | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |     | 0 1 1 1 1 1 1 1 |     | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |     | 0 1 1 1 1 1 1 1 |     | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |  X  | 0 1 1 1 1 1 1 1 |  =  | 0 0 0 0 0 0 0 0 |
+| 1 0 0 0 0 0 0 0 |     | 0 1 1 1 1 1 1 1 |     | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |     | 0 1 1 1 1 1 1 1 |     | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |     | 0 1 1 1 1 1 1 1 |     | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |     | 0 1 1 1 1 1 1 1 |     | 0 0 0 0 0 0 0 0 |
 ```
 
 In the code this is our `clear_files` array which just stores these bitboards that mask certain files, and the same is done for ranks. As such this allows the removes knight positions when performing certain moves. Then in order to move the knight position, our clipped knight position is bit shifted to move the set bit into a proper position:
 
 
 ```[python]
-                | 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
-                | 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
-                | 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
-                | 0 0 0 0 0 0 0 0 |   << 6  =  | 0 1 0 0 0 0 0 0 |
-                | 0 0 0 1 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
-                | 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
-                | 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
-                | 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |   << 6  =  | 0 1 0 0 0 0 0 0 |
+| 0 0 0 1 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
 
-                | 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
-                | 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
-                | 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
-                | 0 0 0 0 0 0 0 0 |  >> 15  =  | 0 0 0 0 0 0 0 0 |
-                | 0 0 0 1 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
-                | 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
-                | 0 0 0 0 0 0 0 0 |            | 0 0 0 0 1 0 0 0 |
-                | 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |  >> 15  =  | 0 0 0 0 0 0 0 0 |
+| 0 0 0 1 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
+| 0 0 0 0 0 0 0 0 |            | 0 0 0 0 1 0 0 0 |
+| 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
 ```
 
 These bitshifts result in new positions for our knight that corresponds to moves. Each move direction is stored in an individual bitboard which are then ORd together to form a final bitboard containing all knight moves for a certain position.
@@ -283,28 +283,28 @@ But what about checks? So for this portion we have to iterate through our moves.
 
 ```[python]
 def king_is_attacked_without_move(self,board):
-        king_bb = board.get_piece_bb(Piece.KING)
-        king_pos = get_occupied_squares(king_bb)
+    king_bb = board.get_piece_bb(Piece.KING)
+    king_pos = get_occupied_squares(king_bb)
 
-        opp_color = ~board.color
+    opp_color = ~board.color
 
-        if len(king_pos) < 1:
-            return True
+    if len(king_pos) < 1:
+        return True
 
-        king_pos = king_pos[0]
+    king_pos = king_pos[0]
 
-        opp_pawns = board.get_piece_bb(Piece.PAWN, opp_color)
-        opp_knights = board.get_piece_bb(Piece.KNIGHT, opp_color)
-        opp_bishops = board.get_piece_bb(Piece.BISHOP, opp_color)
-        opp_rooks = board.get_piece_bb(Piece.ROOK, opp_color)
-        opp_queens = board.get_piece_bb(Piece.QUEEN, opp_color)
+    opp_pawns = board.get_piece_bb(Piece.PAWN, opp_color)
+    opp_knights = board.get_piece_bb(Piece.KNIGHT, opp_color)
+    opp_bishops = board.get_piece_bb(Piece.BISHOP, opp_color)
+    opp_rooks = board.get_piece_bb(Piece.ROOK, opp_color)
+    opp_queens = board.get_piece_bb(Piece.QUEEN, opp_color)
 
-        pawn_check = (self.tables.pawn_moves[board.color][PawnMoveType.ATTACK][king_pos] & opp_pawns) != EMPTY_BB
-        knight_check = (self.tables.knight_moves[king_pos] & opp_knights) != EMPTY_BB
-        bishop_check = (self.get_bishop_moves(king_pos, board) & (opp_bishops | opp_queens)) != EMPTY_BB
-        rook_check = (self.get_rook_moves(king_pos, board) & (opp_rooks | opp_queens)) != EMPTY_BB
+    pawn_check = (self.tables.pawn_moves[board.color][PawnMoveType.ATTACK][king_pos] & opp_pawns) != EMPTY_BB
+    knight_check = (self.tables.knight_moves[king_pos] & opp_knights) != EMPTY_BB
+    bishop_check = (self.get_bishop_moves(king_pos, board) & (opp_bishops | opp_queens)) != EMPTY_BB
+    rook_check = (self.get_rook_moves(king_pos, board) & (opp_rooks | opp_queens)) != EMPTY_BB
 
-        return pawn_check | knight_check | bishop_check | rook_check
+    return pawn_check | knight_check | bishop_check | rook_check
 ```
 
 We simply behave as if the king is an attacking piece (such as a pawn, knight etc.) and check if the attacking piece's moves from the king position matches with a matching opponent's piece. If the king is being moved then we have to first of all apply the move and then perform the same action as eariler to check if the king is moving into check.
@@ -324,76 +324,76 @@ Promotions occur when a move is actually being applied on the board and as such 
 
 ```[python]
 def make_move(self, move, inplace=True):
-        if not inplace:
-            newBoard = Board()
-            newBoard.pieces = np.copy(self.piece_bb)
-            newBoard.color_occ = np.copy(self.color_occ)
-            newBoard.occ = np.copy(self.occ)
-            newBoard.color = self.color
-            newBoard.legal_moves = np.copy(self.legal_moves)
+    if not inplace:
+        newBoard = Board()
+        newBoard.pieces = np.copy(self.piece_bb)
+        newBoard.color_occ = np.copy(self.color_occ)
+        newBoard.occ = np.copy(self.occ)
+        newBoard.color = self.color
+        newBoard.legal_moves = np.copy(self.legal_moves)
 
-        else:
-            newBoard = self
+    else:
+        newBoard = self
 
-        move_exists_in_legal_moves = any(
-            map(lambda x: x.index_from == move.index_from and x.index_to == move.index_to, newBoard.legal_moves))
+    move_exists_in_legal_moves = any(
+        map(lambda x: x.index_from == move.index_from and x.index_to == move.index_to, newBoard.legal_moves))
 
-        if not move_exists_in_legal_moves:
-            return newBoard
-
-        piece = newBoard.get_piece_on(move.index_from)
-        try:
-            newBoard.en_passant_mask[~newBoard.color] = EMPTY_BB
-        except:
-            pass
-
-        if piece == piece.KING:
-            if abs(move.index_from - move.index_to) == 2:
-                # Castling
-                move = list(filter(lambda x: x.index_from == move.index_from and x.index_to == move.index_to,
-                            newBoard.legal_moves))[0]
-                newBoard.clear_square(move.rook_move.index_from)
-                newBoard.set_square(move.rook_move.index_to, piece.ROOK)
-                newBoard.has_moved = ~np.uint64(to_bitboard(move.rook_move.index_from)) & newBoard.has_moved
-                newBoard.is_castled[newBoard.color] = True
-        elif piece == piece.PAWN:
-            white_promote = to_bitboard(move.index_from) & newBoard.move_generator.tables.clear_ranks[
-                Rank.SEVEN] != EMPTY_BB
-            black_promote = to_bitboard(move.index_from) & newBoard.move_generator.tables.clear_ranks[Rank.TWO] != EMPTY_BB
-            if abs(move.index_from - move.index_to) == 16:
-                newBoard.en_passant_mask[newBoard.color] = to_bitboard(move.index_to)
-            elif move.index_from // 8 == 4 or move.index_from // 8 == 5:
-                move = list(filter(lambda x: x.index_from == move.index_from and x.index_to == move.index_to,
-                                   newBoard.legal_moves))[0]
-                if move.en_passant:
-                    newBoard.clear_square(move.index_to - 8 if newBoard.color == Color.WHITE else move.index_to + 8, ~newBoard.color)
-            elif (newBoard.color == Color.WHITE and white_promote) or (newBoard.color != Color.WHITE and black_promote):
-                piece = Piece.QUEEN
-
-
-        newBoard.has_moved = ~np.uint64(to_bitboard(move.index_from)) & newBoard.has_moved
-
-        newBoard.clear_square(move.index_from)
-        newBoard.clear_square(move.index_to, color=~newBoard.color)
-        newBoard.set_square(move.index_to, piece)
-
-        newBoard.color = ~newBoard.color
-
-        piece_bb = np.copy(newBoard.piece_bb)
-        has_castled = copy.copy(newBoard.is_castled)
-        color = copy.copy(newBoard.color)
-
-        newBoard.king_in_check[newBoard.color] = newBoard.move_generator.king_is_attacked(newBoard)
-        newBoard.set_board(piece_bb, has_castled, color)
-        newBoard.king_in_check[~newBoard.color] = False
-        newBoard.legal_moves = newBoard.find_moves()
-        newBoard.game_state = newBoard.is_end_of_game()
-
-        newBoard.history.append(copy.deepcopy(move))
-        newBoard.format_board.update_board(newBoard.piece_bb, newBoard.king_in_check)
-        newBoard.format_board.update_legal_moves(newBoard.legal_moves)
-        newBoard.format_board.update_last_move(newBoard.history[-1])
+    if not move_exists_in_legal_moves:
         return newBoard
+
+    piece = newBoard.get_piece_on(move.index_from)
+    try:
+        newBoard.en_passant_mask[~newBoard.color] = EMPTY_BB
+    except:
+        pass
+
+    if piece == piece.KING:
+        if abs(move.index_from - move.index_to) == 2:
+            # Castling
+            move = list(filter(lambda x: x.index_from == move.index_from and x.index_to == move.index_to,
+                        newBoard.legal_moves))[0]
+            newBoard.clear_square(move.rook_move.index_from)
+            newBoard.set_square(move.rook_move.index_to, piece.ROOK)
+            newBoard.has_moved = ~np.uint64(to_bitboard(move.rook_move.index_from)) & newBoard.has_moved
+            newBoard.is_castled[newBoard.color] = True
+    elif piece == piece.PAWN:
+        white_promote = to_bitboard(move.index_from) & newBoard.move_generator.tables.clear_ranks[
+            Rank.SEVEN] != EMPTY_BB
+        black_promote = to_bitboard(move.index_from) & newBoard.move_generator.tables.clear_ranks[Rank.TWO] != EMPTY_BB
+        if abs(move.index_from - move.index_to) == 16:
+            newBoard.en_passant_mask[newBoard.color] = to_bitboard(move.index_to)
+        elif move.index_from // 8 == 4 or move.index_from // 8 == 5:
+            move = list(filter(lambda x: x.index_from == move.index_from and x.index_to == move.index_to,
+                               newBoard.legal_moves))[0]
+            if move.en_passant:
+                newBoard.clear_square(move.index_to - 8 if newBoard.color == Color.WHITE else move.index_to + 8, ~newBoard.color)
+        elif (newBoard.color == Color.WHITE and white_promote) or (newBoard.color != Color.WHITE and black_promote):
+            piece = Piece.QUEEN
+
+
+    newBoard.has_moved = ~np.uint64(to_bitboard(move.index_from)) & newBoard.has_moved
+
+    newBoard.clear_square(move.index_from)
+    newBoard.clear_square(move.index_to, color=~newBoard.color)
+    newBoard.set_square(move.index_to, piece)
+
+    newBoard.color = ~newBoard.color
+
+    piece_bb = np.copy(newBoard.piece_bb)
+    has_castled = copy.copy(newBoard.is_castled)
+    color = copy.copy(newBoard.color)
+
+    newBoard.king_in_check[newBoard.color] = newBoard.move_generator.king_is_attacked(newBoard)
+    newBoard.set_board(piece_bb, has_castled, color)
+    newBoard.king_in_check[~newBoard.color] = False
+    newBoard.legal_moves = newBoard.find_moves()
+    newBoard.game_state = newBoard.is_end_of_game()
+
+    newBoard.history.append(copy.deepcopy(move))
+    newBoard.format_board.update_board(newBoard.piece_bb, newBoard.king_in_check)
+    newBoard.format_board.update_legal_moves(newBoard.legal_moves)
+    newBoard.format_board.update_last_move(newBoard.history[-1])
+    return newBoard
 ```
 
 First off, we allow for the copy of boards but by default this should not be done. A move is received as a parameter and is checked against our valid moves. Also at each turn we reset the current colours en-passant mask. Special logic is performed for castling pieces and promotions as they require multiple piece changes. Castling moves both the rook and queen and promotions needs a piece to dissapear and a new piece to be allocated. Promotion is decided when a pawn is moved that is currently on the penultimate rank and automatically a queen is placed in that position. En-passent is also specially worked on by setting masks of recent vulnerable pieces (double move) and since en-passent is only performed on certain ranks, those are checked and performed by checking properties set.
