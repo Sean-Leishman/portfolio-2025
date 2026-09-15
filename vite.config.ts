@@ -92,9 +92,18 @@ function contentGeneratorPlugin() {
                 fs.mkdirSync(outputPath, { recursive: true });
             }
 
+            // Bodies go one file per post so they load with that post, not in the main bundle:
+            // content.json is imported eagerly by every page and only needs the list metadata.
+            const bodiesPath = path.join(outputPath, 'posts');
+            fs.rmSync(bodiesPath, { recursive: true, force: true });
+            fs.mkdirSync(bodiesPath, { recursive: true });
+            for (const { compiledMdx, ...post } of content.posts) {
+                fs.writeFileSync(path.join(bodiesPath, `${post.link.split('/').pop()}.json`), JSON.stringify({ compiledMdx }));
+            }
+
             fs.writeFileSync(
                 path.join(outputPath, 'content.json'),
-                JSON.stringify(content, null, 2)
+                JSON.stringify({ posts: content.posts.map(({ compiledMdx: _, ...post }) => post) }, null, 2)
             );
 
         }
@@ -119,7 +128,8 @@ export default defineConfig({
                     if (assetInfo.name && (assetInfo.name.endsWith('.png') || assetInfo.name.endsWith('.jpg') || assetInfo.name.endsWith('.jpeg') || assetInfo.name.endsWith('.gif') || assetInfo.name.endsWith('.webp') || assetInfo.name.endsWith('.avif'))) {
                         return 'src/assets/images/[name][extname]';
                     }
-                    return 'src/assets/[name][extname]';
+                    // hashed so firebase.json can cache CSS and fonts forever
+                    return 'src/assets/[name]-[hash][extname]';
                 }
             }
         }

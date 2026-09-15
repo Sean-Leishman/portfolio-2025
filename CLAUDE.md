@@ -40,7 +40,8 @@ the older `portfolio` repo.
 ```
 npm install
 npm run dev      # vite dev server
-npm run build    # tsc -b && vite build && react-snap
+npm run build    # tsc -b && vite build && react-snap && inline-css
+node scripts/check-hydration.cjs  # with `npm run preview` running; fails on hydration errors
 npm run preview  # serve the built dist/
 npm run sync     # tsx scripts/sync-obsidian.ts (reads Obsidian vault)
 npm run lint

@@ -30,8 +30,8 @@ function Papers() {
                     <EntryDescription>
                         {paper.authors.map((author, i) => (
                             <span key={author}>
-                                {i > 0 && ', '}
-                                {author === 'Sean Leishman' ? <span className="font-extrabold text-foreground">{author}</span> : author}
+                                {i > 0 && <span>, </span>}
+                                {author === 'Sean Leishman' ? <span className="font-extrabold text-foreground">{author}</span> : <span>{author}</span>}
                             </span>
                         ))}
                     </EntryDescription>

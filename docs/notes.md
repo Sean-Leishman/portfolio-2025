@@ -87,3 +87,24 @@ naive "not in vault => delete" would have wiped them. Blocked/failed notes stay
 in the public index, so their last good version is kept. The pre-commit hook
 now uses `git add -A` so deletions get staged. Orphaned images are not swept.
 Covered by `scripts/test-leak-gate.sh`.
+
+### 2026-09-15 — performance pass (Lighthouse mobile, local preview)
+
+Home 53 -> 85, post page ~48 -> 82. Live site scored 48 but was serving a 402B empty shell
+(stale deploy predating the react-snap fix), so deploying matters as much as any of this.
+
+- Google Fonts `@import` in CSS was ~3s render-blocking and 426KB. Self-hosted latin subsets
+  in `src/assets/fonts/` (267KB, dropped the unused `opsz` axis).
+- SVG `feTurbulence` grain cost ~300ms style/layout + TBT. Replaced with a 5KB noise tile
+  (`src/assets/grain-*.webp`, generated with ImageMagick `+noise Random`).
+- Post bodies, MDX runtime and syntax highlighter split out of the main bundle (133 -> 94KB gz).
+  `main.tsx` preloads the current post before hydrating and prefetches the rest when idle.
+- `createRoot` -> `hydrateRoot`: createRoot re-painted react-snap's HTML after JS, which was the LCP.
+  Hydration needed: no adjacent JSX text nodes (`{a} · {b}` -> template string), react-snap
+  `minifyHtml.collapseWhitespace: false`, CSS-driven theme icon, and a text-merging renderer
+  for react-syntax-highlighter. Guard: `node scripts/check-hydration.cjs` against `npm run preview`.
+- `scripts/inline-css.mjs` (post-build) inlines the 5KB CSS and preloads Merriweather.
+- `firebase.json`: `trailingSlash: false` (serve `posts/index.html` at `/posts` without a
+  redirect), immutable caching for hashed js/css/woff2, 7 days for images.
+- Remaining LCP (~4s simulated) is text waiting on the 95KB font. `font-display: optional`
+  would fix it at the cost of a fallback font on first slow visits; not done.

@@ -3,7 +3,7 @@ import './App.css'
 import Home from './pages/Home'
 import Posts from './pages/Posts'
 import Projects from './pages/Projects'
-import Post from './components/Post'
+import PostRoute from './components/PostRoute'
 import { Toaster } from './components/ui/sonner'
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
@@ -15,20 +15,7 @@ function App() {
     const items = getPosts()
 
     const itemPaths = items.map((item) => (
-        <Route
-            key={item.link}
-            path={item.link}
-            element={
-                <Post compiledMDX={item.compiledMdx as string}
-                    title={item.title}
-                    date={item.date}
-                    imageSrc={item.imageSrc}
-                    imageAlt={item.imageAlt}
-                // tags={item.tags}
-                //summary={item.summary}
-                />
-            }
-        />
+        <Route key={item.link} path={item.link} element={<PostRoute post={item} />} />
     ))
 
     return (

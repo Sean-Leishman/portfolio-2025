@@ -5,7 +5,7 @@ import Figure from './Figure';
 import { EntryDescription, EntryHeader, EntryRow, ExternalLink, Tags, metaLink, titleLink } from './Entry';
 
 function ProjectCard({ name, date, description, blogLink, externalLink, githubLink, image, technologies }: { name: string, date: string, description: string, blogLink: string | undefined, externalLink: string | undefined, githubLink: string, image?: string, technologies: string[] }) {
-    const title = externalLink ? <ExternalLink href={externalLink} className={titleLink}>{name} ↗</ExternalLink> : name;
+    const title = externalLink ? <ExternalLink href={externalLink} className={titleLink}>{`${name} ↗`}</ExternalLink> : name;
 
     const meta = (
         <>

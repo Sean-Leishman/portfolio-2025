@@ -6,7 +6,7 @@ function MoreLink({ remaining, noun, to }: { remaining: number, noun: string, to
     const plural = `${noun}${remaining === 1 ? '' : 's'}`;
     return (
         <p className="mt-6 text-left text-sm italic text-muted-foreground">
-            {remaining} more {plural} in <LinkTo to={to} text={`all ${noun}s`} />
+            {`${remaining} more ${plural} in `}<LinkTo to={to} text={`all ${noun}s`} />
         </p>
     );
 }

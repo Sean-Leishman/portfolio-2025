@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && react-snap",
+    "build": "tsc -b && vite build && react-snap && node scripts/inline-css.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "sync": "npx tsx scripts/sync-obsidian.ts",
@@ -39,7 +39,11 @@
     ],
     "removeBlobs": true,
     "removeScriptTags": false,
-    "asyncScriptTags": false
+    "asyncScriptTags": false,
+    "minifyHtml": {
+      "collapseWhitespace": false,
+      "removeComments": false
+    }
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.0",

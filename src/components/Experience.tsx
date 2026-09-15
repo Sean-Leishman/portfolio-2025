@@ -64,7 +64,7 @@ function Experience({
                 meta={
                     <>
                         <img src={logo} alt="" className="w-4 h-4 object-contain rounded-sm" />
-                        <span>{company} · {date}</span>
+                        <span>{`${company} · ${date}`}</span>
                         {canExpand && (
                             <span className={`transition-transform duration-150 ease-out ${isExpanded ? 'rotate-45' : ''}`}>+</span>
                         )}

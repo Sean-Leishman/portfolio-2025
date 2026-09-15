@@ -9,10 +9,28 @@ import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import python from 'react-syntax-highlighter/dist/esm/languages/hljs/python';
 import kotlin from 'react-syntax-highlighter/dist/esm/languages/hljs/kotlin';
 import cpp from 'react-syntax-highlighter/dist/esm/languages/hljs/cpp';
+import createElement from 'react-syntax-highlighter/dist/esm/create-element';
 
 SyntaxHighlighter.registerLanguage('python', python);
 SyntaxHighlighter.registerLanguage('kotlin', kotlin);
 SyntaxHighlighter.registerLanguage('cpp', cpp);
+
+// hljs returns runs of adjacent plain-text tokens, which React renders as separate text nodes.
+// react-snap's HTML has them merged into one, so hydration failed on every code block and React
+// re-rendered the article. Merging them before rendering makes the two agree.
+type CodeNode = { type: string, value?: string | number, children?: CodeNode[] } & Record<string, unknown>;
+function mergeText(nodes: CodeNode[]): CodeNode[] {
+    const out: CodeNode[] = [];
+    for (const n of nodes) {
+        const node = n.children ? { ...n, children: mergeText(n.children) } : n;
+        const prev = out[out.length - 1];
+        if (node.type === 'text' && prev?.type === 'text') out[out.length - 1] = { ...prev, value: `${prev.value}${node.value}` };
+        else out.push(node);
+    }
+    return out;
+}
+const mergedRenderer = ({ rows, stylesheet, useInlineStyles }: any) =>
+    mergeText(rows).map((node, i) => createElement({ node: node as any, stylesheet, useInlineStyles, key: `code-segment-${i}` }));
 
 import LinkTo from './LinkTo';
 import Figure from './Figure';
@@ -28,6 +46,7 @@ function code({ className, children, ...properties }: any) {
     return <SyntaxHighlighter
         language={match[1]}
         PreTag="div"
+        renderer={mergedRenderer}
         className="mb-4"
         {...properties}>
         {children} </SyntaxHighlighter>
