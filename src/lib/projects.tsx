@@ -2,7 +2,7 @@ const projects = [
     {
         name: "CodeMe",
         description: "Search engine developed to efficiently find relevant code snippets and discussions built using the StackOverflow dataset. Employs advanced information retrieval techniques across 59 million posts",
-        externalLink: "./portfolio",
+        externalLink: "",
         date: "2025",
         image: "/src/assets/CodeMe.webp",
         technologies: ["Python", "React", "PostgreSQL"],

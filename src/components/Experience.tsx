@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { EntryHeader, EntryRow, Tags } from './Entry';
+
 function Section({ label, items }: { label: string; items: string[] }) {
     return (
         <div className="mb-5">
@@ -45,9 +47,9 @@ function Experience({
     const canExpand = sections.length > 0 || !!skills?.length;
 
     return (
-        <div className="py-6 first:pt-0">
-            <div
-                className={`flex items-baseline justify-between gap-x-6 gap-y-2 flex-wrap ${canExpand ? 'cursor-pointer group' : ''}`}
+        <EntryRow>
+            <EntryHeader
+                className={canExpand ? 'cursor-pointer group' : ''}
                 onClick={() => canExpand && setIsExpanded(!isExpanded)}
                 role={canExpand ? 'button' : undefined}
                 tabIndex={canExpand ? 0 : undefined}
@@ -58,40 +60,31 @@ function Experience({
                         setIsExpanded(!isExpanded);
                     }
                 }}
-            >
-                <h3 className="text-xl font-extrabold tracking-tight text-foreground group-hover:text-accent transition-colors">
-                    {role}
-                </h3>
-                <div className="mono text-xs text-muted-foreground flex items-center gap-2 shrink-0">
-                    <img src={logo} alt="" className="w-4 h-4 object-contain rounded-sm" />
-                    <span>{company} · {date}</span>
-                    {canExpand && (
-                        <span className={`ml-1 transition-transform duration-150 ease-out ${isExpanded ? 'rotate-45' : ''}`}>+</span>
-                    )}
-                </div>
-            </div>
+                title={<span className="group-hover:text-accent transition-colors">{role}</span>}
+                meta={
+                    <>
+                        <img src={logo} alt="" className="w-4 h-4 object-contain rounded-sm" />
+                        <span>{company} · {date}</span>
+                        {canExpand && (
+                            <span className={`transition-transform duration-150 ease-out ${isExpanded ? 'rotate-45' : ''}`}>+</span>
+                        )}
+                    </>
+                }
+            />
 
             {/* grid 0fr -> 1fr animates to the content's real height, no max-h guessing.
                 150ms ease-out, and the top gap lives inside the clipped box: as a toggled mt-6 it
                 snapped instantly while the height was still animating, which read as a jump. */}
             <div className={`grid transition-[grid-template-rows,opacity] duration-150 ease-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
-                <div className="overflow-hidden"><div className="pt-6">
+                <div className="overflow-hidden"><div className="pt-4">
                     {sections.map((s) => (
                         <Section key={s.label} label={s.label} items={s.items} />
                     ))}
 
-                    {!!skills?.length && (
-                        <div className="flex flex-wrap gap-2">
-                            {skills.map((skill, i) => (
-                                <span key={i} className="mono px-2.5 py-1 text-xs text-muted-foreground border border-border rounded-full">
-                                    {skill}
-                                </span>
-                            ))}
-                        </div>
-                    )}
+                    <Tags items={skills} />
                 </div></div>
             </div>
-        </div>
+        </EntryRow>
     );
 }
 

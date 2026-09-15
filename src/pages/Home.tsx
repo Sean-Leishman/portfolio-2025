@@ -3,6 +3,8 @@ import LinkTo from '../components/LinkTo'
 import Main from '../components/Main'
 import PostsList from '../components/PostsList'
 import ProjectCard from '../components/ProjectCard'
+import MoreLink from '../components/MoreLink'
+import { EntryList } from '../components/Entry'
 import Dot from '../components/Dot'
 import ExperienceList from '../components/ExperienceList'
 import EmailLink from '../components/EmailLink'
@@ -48,7 +50,7 @@ function Home() {
             </div>
 
             <Section title="PROJECTS">
-            <div className="flex flex-col items-center">
+            <EntryList>
                 {subsetProjects.map((project, index) => (
                     <ProjectCard
                         key={index}
@@ -61,11 +63,8 @@ function Home() {
                         technologies={project.technologies}
                     />
                 ))}
-                <div className="mt-6 text-center text-muted-foreground italic">
-                    <p>And many more projects ...</p>
-                    <LinkTo customClassName="text-center" to="/projects" text=" View all projects here" />
-                </div>
-            </div>
+            </EntryList>
+            <MoreLink remaining={projects.length - subsetProjects.length} noun="project" to="/projects" />
             </Section>
             <Section title="EXPERIENCE"><ExperienceList /></Section>
             <Section title="PAPERS"><Papers /></Section>
