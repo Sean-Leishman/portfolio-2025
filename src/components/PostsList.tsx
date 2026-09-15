@@ -4,10 +4,12 @@ import TableEntry from './TableEntry';
 import LinkTo from './LinkTo';
 
 function PostsList({ isHome = false }: { isHome?: boolean }) {
-    const posts = getPosts();
+    const allPosts = getPosts();
+    // Home shows the newest few; the link counts only the ones left out (it used to say "6 more" under all 6).
+    const posts = isHome ? allPosts.slice(0, 5) : allPosts;
 
-    const postsCount = posts.length;
-    const postsLink = isHome ? <span>{postsCount} more posts can be found in <LinkTo text="all posts" to="./posts" /></span> : null;
+    const remaining = allPosts.length - posts.length;
+    const postsLink = remaining > 0 ? <span>{remaining} more {remaining === 1 ? 'post' : 'posts'} in <LinkTo text="all posts" to="/posts" /></span> : null;
 
     return (
         <div className="">

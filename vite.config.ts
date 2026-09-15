@@ -144,9 +144,12 @@ export default defineConfig({
                 {
                     // Was `**/*`, which also copied 78 WSL `:Zone.Identifier` turds into dist/.
                     src: 'src/assets/**/*.{png,jpg,jpeg,gif,webp,avif,svg}',
-                    dest: 'src/assets',
+                    dest: '.',
                 }
-            ]
+            ],
+            // Without this the glob flattened pdga/, blog/ etc. into dist/src/assets/, so every
+            // subfolder image 404'd (served index.html) -- including the home page hero.
+            structured: true,
         }
         ),
     ],
