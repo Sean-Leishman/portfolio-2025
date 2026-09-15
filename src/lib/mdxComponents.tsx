@@ -4,7 +4,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     return {
         ...components,
         h1: (props) => <h1 className="text-2xl font-extrabold tracking-tight mt-12 mb-3" {...props} />,
-        h2: (props) => <h2 className="text-xl font-extrabold tracking-tight mt-12 mb-3 pt-3 border-t border-border" {...props} />,
+        h2: (props) => <h2 className="text-xl font-extrabold tracking-tight mt-12 mb-3" {...props} />,
         h3: (props) => <h3 className="text-lg font-bold mt-8 mb-2" {...props} />,
         h4: (props) => <h4 className="eyebrow mt-6 mb-2" {...props} />,
         li: (props) => (

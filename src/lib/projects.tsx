@@ -84,7 +84,7 @@ const projects = [
     },
     {
         name: "Portfolio v1",
-        description: "Original design of my personal portfolio webiste. Features a unique particle swarm visualisations in a single web page.",
+        description: "Original design of my personal portfolio website. Features a unique particle swarm visualisations in a single web page.",
         link: "./portfolio",
         date: "2023",
         image: "/src/assets/Portfolio.webp",
@@ -149,7 +149,7 @@ const projects = [
     },
     {
         name: "StockTrend",
-        description: "Full stack project that incorperates streamed data from the Twitter API and analyses sentiment in individual tweets in order to determine the overall sentiment in a certain stock",
+        description: "Full stack project that incorporates streamed data from the Twitter API and analyses sentiment in individual tweets in order to determine the overall sentiment in a certain stock",
         externalLink: "",
         blogLink: "/posts/stocktrend",
         date: "2022",

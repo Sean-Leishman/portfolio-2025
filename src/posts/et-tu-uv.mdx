@@ -19,11 +19,11 @@ This project was created as part of the <LinkTo to="https://x.smu.edu.sg/" text=
 
 ## What is Et-Tu-UV?
 
-As part of the requirements, the task was set to devise a solution to aid user's in a health focussed arena. And, with inspiration from Singapore, we focussed on deterring the adverse effects of overexposure to both UV and other heat-related elements such as temperature and humidity. In our plan, there was an inherient focus on collecting data and thus using that data to generate insights for the final end-user.
+As part of the requirements, the task was set to devise a solution to aid user's in a health focussed arena. And, with inspiration from Singapore, we focussed on deterring the adverse effects of overexposure to both UV and other heat-related elements such as temperature and humidity. In our plan, there was an inherent focus on collecting data and thus using that data to generate insights for the final end-user.
 
 The final product that was chosen, was an Arduino-based wearable that could communicate with our server which collected and transformed data for display on a custom dashboard.
 
-## Building the Wearble
+## Building the Wearable
 
 <Figure className="w-auto max-h-128" src="/src/assets/wearable.png" />
 
@@ -33,7 +33,7 @@ Generally, there was an approach of quickly slamming together components to form
 
 <Figure className="w-auto max-h-128" src="/src/assets/ettuuv-arch.webp" />
 
-The final solution involved overcoming numerouse engineering challenges to allow communication between various different components, effectively and within a fairly short time frame. The main roadblock occured within the phone and arduino module as the chosen method of communication was bluetooth and as such, data was fairly easily sent out of the bluetooth module but then the phone itself had to send the data to a server. The
+The final solution involved overcoming numerous engineering challenges to allow communication between various different components, effectively and within a fairly short time frame. The main roadblock occurred within the phone and arduino module as the chosen method of communication was bluetooth and as such, data was fairly easily sent out of the bluetooth module but then the phone itself had to send the data to a server. The
 <LinkTo to="https://play.google.com/store/apps/details?id=com.adafruit.bluefruit.le.connect&hl=en_GB&gl=US" text="app" />, was not made ourselves and as such we were restricted by the chosen method.
 
 ```[cpp]
@@ -90,7 +90,7 @@ The server contained various functionalities in order to generate the appropriat
 
 ### ML Methods
 
-Some machine learning methods were employed in order to provide some practical, predictive quality to the insights provided. These included the prediction of various metrics such as the time of the day with typically the highest exposure to UV radiation and also analying the amount of UV received by the user during a given day. By tracking these metrics, relevant and informative insights could be produced to the end-user.
+Some machine learning methods were employed in order to provide some practical, predictive quality to the insights provided. These included the prediction of various metrics such as the time of the day with typically the highest exposure to UV radiation and also analysing the amount of UV received by the user during a given day. By tracking these metrics, relevant and informative insights could be produced to the end-user.
 
 ### Alerts
 
@@ -104,7 +104,7 @@ In order, to achieve a good-looking front-end some extra portions were introduce
 
 ## Evaluation
 
-There were some questions that we fought of ourselves while developing the software. Some, pertaining to the usefulness of the idea itself. However, this can be justified as users being able to judge for themselves their own sun levels however even the more experienced holiday travelers know that one can lose track of sun levels themselves. As well as this, this project would be useful for outdoor construction companies looking to overlook the health of their employees to ensure that their employees are not under undue and unhealthy conditions while carrying out labourious activities.
+There were some questions that we asked ourselves while developing the software. Some, pertaining to the usefulness of the idea itself. However, this can be justified as users being able to judge for themselves their own sun levels however even the more experienced holiday travelers know that one can lose track of sun levels themselves. As well as this, this project would be useful for outdoor construction companies looking to overlook the health of their employees to ensure that their employees are not under undue and unhealthy conditions while carrying out laborious activities.
 
 In terms of the product itself, improvements would have to be made to the prototype to make it wearable by a user and ensuring the hardware is error free. Other metrics, and the machine learning methods could be developed further as to allow a more accurate prediction of insights.
 
