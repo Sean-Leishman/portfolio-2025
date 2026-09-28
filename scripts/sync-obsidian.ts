@@ -400,7 +400,8 @@ function sync(): void {
     // First pass: build index of all public posts for link resolution
     console.log('Building public posts index...');
     buildPublicPostsIndex(markdownFiles);
-    console.log(`Found ${publicPosts.size / 2} public posts\n`);
+    const publicCount = new Set([...publicPosts.values()].map((p) => p.slug)).size;
+    console.log(`Found ${publicCount} public posts\n`);
 
     // Second pass: process and convert files
     let synced = 0;

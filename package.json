@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build && react-snap && node scripts/inline-css.mjs",
-    "lint": "eslint .",
+    "lint": "eslint . && node scripts/check-classes.mjs",
     "preview": "vite preview",
     "sync": "npx tsx scripts/sync-obsidian.ts",
     "prepare": "husky"
