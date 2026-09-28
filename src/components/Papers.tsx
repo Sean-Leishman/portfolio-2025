@@ -6,6 +6,7 @@ const papers = [
         title: "Analysing the role of lexical and temporal information in turn-taking through predictability",
         authors: ["Sean Leishman", "Sarenne Wallbridge", "Peter Bell"],
         venue: "EACL 2026",
+        location: "Rabat, Morocco",
         link: "https://aclanthology.org/2026.eacl-long.283/",
         pdf: "https://aclanthology.org/2026.eacl-long.283.pdf",
     },
@@ -13,6 +14,7 @@ const papers = [
         title: "PairwiseTurnGPT: a multi-stream turn prediction model for spoken dialogue",
         authors: ["Sean Leishman", "Peter Bell", "Sarenne Wallbridge"],
         venue: "SemDial 2024",
+        location: "Trento, Italy",
         link: "https://www.semdial.org/anthology/papers/Z/Z24/Z24-3002/",
         pdf: "http://semdial.org/anthology/Z24-Leishman_semdial_0002.pdf",
     },
@@ -25,7 +27,7 @@ function Papers() {
                 <EntryRow key={paper.link}>
                     <EntryHeader
                         title={<ExternalLink href={paper.link} className={titleLink}>{paper.title}</ExternalLink>}
-                        meta={<><span>{paper.venue}</span><ExternalLink href={paper.pdf} className={metaLink}>PDF ↗</ExternalLink></>}
+                        meta={<><span>{`${paper.venue} · ${paper.location}`}</span><ExternalLink href={paper.pdf} className={metaLink}>PDF ↗</ExternalLink></>}
                     />
                     <EntryDescription>
                         {paper.authors.map((author, i) => (
