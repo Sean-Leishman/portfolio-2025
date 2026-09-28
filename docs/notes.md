@@ -108,3 +108,27 @@ Home 53 -> 85, post page ~48 -> 82. Live site scored 48 but was serving a 402B e
   redirect), immutable caching for hashed js/css/woff2, 7 days for images.
 - Remaining LCP (~4s simulated) is text waiting on the 95KB font. `font-display: optional`
   would fix it at the cost of a fallback font on first slow visits; not done.
+
+### 2026-09-16 — typography and content pass
+
+Design decisions, so they are not re-litigated:
+
+- **One type scale: 24 / 18 / 16 / 14 / 12.** Section labels 24 (uppercase, `tracking-[0.12em]`),
+  entry titles 18, body 16, supporting text 14, mono metadata 12. Body leading 1.5 (1.625 read
+  loose at this measure); prose capped at `max-w-[68ch]` — the 672px column ran ~85 chars/line.
+- **One left edge.** The home intro was inset `mx-8` while every list below sat flush.
+- **Rules only start or divide a list** — under a section label, or between rows. Never above or
+  below a heading as decoration; a post `##` is set apart by weight and space alone.
+- **No first-line indents**: paragraphs are already separated by space, and indents suit justified
+  print, not a scanned page. Hanging indents (experience details) are the exception worth keeping.
+- `text-bold` and `text-semibold` in `src/lib/mdxComponents.tsx` were never Tailwind classes, so
+  every in-post heading rendered at body weight (preflight strips the browser default). Fixed;
+  worth a lint guard, since invented class names fail silently.
+- Code blocks: `.code-block` panel in App.css (muted bg, JetBrains Mono, 12px radius, scrolls),
+  hljs colours from the site's tokens so dark mode works, and a copy button (`CodeBlock.tsx`).
+- Content: dropped the Hugo-era "See you next time," from 4 posts, fixed 41 spellings, dedented
+  the chess ASCII diagrams (12-16 leading spaces) and the method bodies pasted from a class.
+- Footer is now `Sean Leishman · <year> · GitHub`.
+
+Open, needs the owner: the site is still called **xxx** in the top-left; "Test Public Post" is the
+newest post on the live list; nothing since 2026-09-07 has been deployed (`firebase deploy`).
