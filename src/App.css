@@ -207,10 +207,17 @@ p {
     padding: 0;
     margin: 0;
     overflow-x: auto;
+    position: static;
 }
 
 .code-block:has(.code-block) {
     overflow: visible;
+}
+
+/* reserve the button's row so the first line of code never runs underneath it (narrow screens).
+   Outer panel only: the inner .code-block holds the button but draws no padding of its own. */
+pre.code-block:has(.code-copy) {
+    padding-top: 2.5rem;
 }
 
 .code-block code {
