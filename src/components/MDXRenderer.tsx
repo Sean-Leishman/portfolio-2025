@@ -29,14 +29,15 @@ function mergeText(nodes: CodeNode[]): CodeNode[] {
     }
     return out;
 }
-const mergedRenderer = ({ rows, stylesheet, useInlineStyles }: any) =>
-    mergeText(rows).map((node, i) => createElement({ node: node as any, stylesheet, useInlineStyles, key: `code-segment-${i}` }));
+type RendererProps = { rows: unknown[], stylesheet: Record<string, React.CSSProperties>, useInlineStyles: boolean };
+const mergedRenderer = ({ rows, stylesheet, useInlineStyles }: RendererProps) =>
+    mergeText(rows as CodeNode[]).map((node, i) => createElement({ node: node as Parameters<typeof createElement>[0]['node'], stylesheet, useInlineStyles, key: `code-segment-${i}` }));
 
 import CodeBlock from './CodeBlock';
 import LinkTo from './LinkTo';
 import Figure from './Figure';
 
-function code({ className, children, ...properties }: any) {
+function code({ className, children, ...properties }: { className?: string, children?: React.ReactNode } & Record<string, unknown>) {
     const match = /language-\[(\w+)\]/.exec(className || '');
     if (!match) {
         // No language class means inline code (`like this`), which MDX routes through the same
@@ -54,12 +55,12 @@ function code({ className, children, ...properties }: any) {
         useInlineStyles={false}
         className="code-block"
         {...properties}>
-        {children} </SyntaxHighlighter></CodeBlock>
+        {source}</SyntaxHighlighter></CodeBlock>
 
 }
 
 function MDXRenderer({ compiledMDX, components = {} }: {
-    compiledMDX: string | undefined, components?: Record<string, any>
+    compiledMDX: string | undefined, components?: Record<string, React.ComponentType<Record<string, unknown>>>
 }) {
     const Component = React.useMemo(() => {
         try {

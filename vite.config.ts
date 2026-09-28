@@ -15,7 +15,7 @@ import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 
-let components: { [key: string]: string } = {
+const components: { [key: string]: string } = {
     "./src/components/LinkTo.tsx": "",
     "./src/components/Figure.tsx": "",
 }
@@ -42,7 +42,7 @@ async function generateItems(directory: string) {
                     source: content,
                     // globals: globals,
                     files: components,
-                    mdxOptions(options, _) {
+                    mdxOptions(options) {
                         options.remarkPlugin = [
                             remarkGfm,
                             remarkFrontmatter,
@@ -76,7 +76,7 @@ async function generateItems(directory: string) {
             ));
 
 
-    return items.sort((a: any, b: any) => { return new Date(b.date).getTime() - new Date(a.date).getTime() });
+    return items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
 function contentGeneratorPlugin() {

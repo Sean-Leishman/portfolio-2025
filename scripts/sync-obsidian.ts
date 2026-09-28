@@ -297,7 +297,7 @@ function processFile(filePath: string): { success: boolean; outputPath?: string;
         }
 
         // Build new frontmatter for portfolio
-        const newFrontmatter: Record<string, any> = {
+        const newFrontmatter: Record<string, unknown> = {
             author: 'Sean Leishman',
             title: frontmatter.title,
             date: dateStr,
