@@ -54,7 +54,7 @@ const EmailLink = () => {
             <button
                 onClick={handleClick}
                 className="text-accent font-bold hover:underline cursor-pointer"
-                aria-label="Copy email to clipboard"
+                aria-label="Email Me: copy address to clipboard"
             >
                 Email Me
             </button>

@@ -4,7 +4,7 @@ import LinkTo from './LinkTo';
 import Figure from './Figure';
 import { EntryDescription, EntryHeader, EntryRow, ExternalLink, Tags, metaLink, titleLink } from './Entry';
 
-function ProjectCard({ name, date, description, blogLink, externalLink, githubLink, image, technologies }: { name: string, date: string, description: string, blogLink: string | undefined, externalLink: string | undefined, githubLink: string, image?: string, technologies: string[] }) {
+function ProjectCard({ name, date, description, blogLink, externalLink, githubLink, image, technologies, headingAs }: { name: string, date: string, description: string, blogLink: string | undefined, externalLink: string | undefined, githubLink: string, image?: string, technologies: string[], headingAs?: 'h2' | 'h3' }) {
     const title = externalLink ? <ExternalLink href={externalLink} className={titleLink}>{`${name} ↗`}</ExternalLink> : name;
 
     const meta = (
@@ -17,7 +17,7 @@ function ProjectCard({ name, date, description, blogLink, externalLink, githubLi
 
     return (
         <EntryRow>
-            <EntryHeader title={title} meta={meta} />
+            <EntryHeader title={title} meta={meta} as={headingAs} />
             <EntryDescription>{description}</EntryDescription>
             {image && <div className="mt-4"><Figure src={image} alt={`${name} screenshot`} className="w-full h-64 object-cover rounded-md" /></div>}
             <Tags items={technologies} />

@@ -188,15 +188,10 @@ p {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
-    /* visible by default: hover-only would hide it on touch devices */
-    opacity: 0.55;
-    transition: opacity 150ms ease-out;
+    /* visible by default: hover-only would hide it on touch devices, and fading it below full
+       opacity dropped it under the 4.5:1 contrast floor */
+    transition: color 150ms ease-out;
     cursor: pointer;
-}
-
-.code-block:hover .code-copy,
-.code-copy:focus-visible {
-    opacity: 1;
 }
 
 /* a highlighted block is a .code-block inside MDX's <pre>: only the outer one draws the panel,
@@ -226,10 +221,11 @@ pre.code-block:has(.code-copy) {
     font: inherit;
 }
 
-.hljs-comment, .hljs-quote { color: hsl(var(--muted-foreground)); font-style: italic; }
+.hljs-comment, .hljs-quote { color: hsl(30 8% 34%); font-style: italic; }
+.dark .hljs-comment, .dark .hljs-quote { color: hsl(35 8% 62%); }
 .hljs-keyword, .hljs-literal, .hljs-type { color: hsl(var(--accent)); }
 .hljs-string, .hljs-meta .hljs-string { color: hsl(150 30% 30%); }
-.hljs-number, .hljs-symbol { color: hsl(28 65% 38%); }
+.hljs-number, .hljs-symbol { color: hsl(28 70% 33%); }
 .hljs-title, .hljs-title.class_, .hljs-title.function_ { color: hsl(var(--foreground)); font-weight: 600; }
 .hljs-built_in, .hljs-params, .hljs-attr { color: hsl(var(--foreground) / 0.75); }
 

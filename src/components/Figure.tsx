@@ -1,4 +1,4 @@
-function Figure({ src, alt, className }: { src: string | undefined; alt?: string | undefined; className?: string | undefined }) {
+function Figure({ src, alt = "", className }: { src: string | undefined; alt?: string | undefined; className?: string | undefined }) {
     if (!src) {
         return <></>;
     }

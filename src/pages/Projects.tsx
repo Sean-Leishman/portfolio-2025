@@ -22,6 +22,7 @@ function Projects() {
                         image={project.image}
                         githubLink={project.githubLink}
                         technologies={project.technologies}
+                        headingAs="h2"
                     />
                 ))}
             </EntryList>

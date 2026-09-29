@@ -11,10 +11,10 @@ export function EntryRow({ children }: { children: ReactNode }) {
     return <li className="py-6 first:pt-0 last:pb-0 list-none">{children}</li>;
 }
 
-export function EntryHeader({ title, meta, className = '', ...rest }: { title: ReactNode, meta?: ReactNode } & Omit<HTMLAttributes<HTMLDivElement>, 'title'>) {
+export function EntryHeader({ title, meta, as: Heading = 'h3', className = '', ...rest }: { title: ReactNode, meta?: ReactNode, as?: 'h2' | 'h3' } & Omit<HTMLAttributes<HTMLDivElement>, 'title'>) {
     return (
         <div {...rest} className={`flex items-baseline justify-between gap-x-6 gap-y-1 flex-wrap ${className}`}>
-            <h3 className="text-lg font-extrabold tracking-tight text-foreground">{title}</h3>
+            <Heading className="text-lg font-extrabold tracking-tight text-foreground">{title}</Heading>
             {meta && <div className="mono text-xs text-muted-foreground flex items-center gap-3 shrink-0">{meta}</div>}
         </div>
     );

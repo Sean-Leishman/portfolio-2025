@@ -12,7 +12,7 @@ imageSrc: "/src/assets/pdga/flying_car.webp"
 ---
 > Source code can be found at <LinkTo to="https://github.com/Sean-Leishman/turtle-chess/tree/master" text="Github"/>
 
-<Figure className="w-auto h-auto" src="/src/assets/chess.webp" />
+<Figure className="w-auto h-auto" src="/src/assets/chess.webp" alt="The Pygame interface showing a game in progress" />
 
 
 Over my life I have had a bit of fascination with the game of chess. Reinvigorated, over the period of COVID, when there was not a whole lot to do aside from learn more about the game. But looking at the engines, I was intrigued with how chess could be mastered and possibly be solved by a computational algorithm.
@@ -220,7 +220,7 @@ def generate_knight_moves(self):
 
 `bb` is the list which contains moves from each position. So we check each position in that list. It is important to note that this will not error if we go beyond a certain row or column (only if going before 0 or beyond 2^64) and so we must be rigorous in checking. There are eight possible moves a knight can make.
 
-<Figure className="w-auto h-auto" src="/src/assets/knight.webp" />
+<Figure className="w-auto h-auto" src="/src/assets/knight.webp" alt="A knight on e4 with its eight possible destination squares highlighted" />
 
 As such, we require clipping when the knight will overflow the row, so for example, we should remove knights on row a when the knight is making moves westwards. As such, we should do a bitwise AND between our knight bitboard and a bitboard that contains 1s from index 8 onwards. So for example if our knight is on row A we would have:
 

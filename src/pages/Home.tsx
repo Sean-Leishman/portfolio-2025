@@ -21,7 +21,7 @@ const subsetProjects = projects.slice(0, 3);
 function Section({ title, children }: { title: string, children: ReactNode }) {
     return (
         <section className="mt-16">
-            <h1 className="text-2xl font-extrabold text-center tracking-[0.12em] mb-6">{title}<Dot /></h1>
+            <h2 className="text-2xl font-extrabold text-center tracking-[0.12em] mb-6">{title}<Dot /></h2>
             <div className="border-t border-border pt-6">{children}</div>
         </section>
     )
@@ -30,6 +30,8 @@ function Section({ title, children }: { title: string, children: ReactNode }) {
 function Home() {
     return (
         <Main imageSrc="/src/assets/pdga/daily_life_russian.webp">
+            {/* the page has no visible title; screen readers and search engines still need one */}
+            <h1 className="sr-only">Sean Leishman</h1>
             <div className="text-base font-semibold leading-normal block">
                 <span className="mb-2 clear-none">
                     <img src="/src/assets/pdga/dr-w.webp" alt="W" className="w-24 h-auto mr-2 clear-none float-left" />
