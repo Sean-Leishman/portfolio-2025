@@ -61,6 +61,7 @@ async function generateItems(directory: string) {
                     tags: frontmatter.tags || [],
                     imageSrc: frontmatter.imageSrc || '',
                     imageAlt: frontmatter.imageAlt || '',
+                    summary: frontmatter.Summary || frontmatter.summary || '',
                     // Was extractLink(directory, title, date), which put the raw title -- spaces,
                     // colons and all -- straight into the URL. react-snap then wrote those routes to
                     // disk with literal %20 in the directory name, so a browser asking for

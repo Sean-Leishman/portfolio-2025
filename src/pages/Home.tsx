@@ -9,6 +9,7 @@ import Dot from '../components/Dot'
 import ExperienceList from '../components/ExperienceList'
 import EmailLink from '../components/EmailLink'
 import Papers from '../components/Papers'
+import Meta from '../components/Meta'
 
 import getProjects from '../lib/projects'
 
@@ -30,6 +31,11 @@ function Section({ title, children }: { title: string, children: ReactNode }) {
 function Home() {
     return (
         <Main imageSrc="/src/assets/pdga/daily_life_russian.webp">
+            <Meta
+                title="Sean Leishman"
+                description="Software engineer in Edinburgh. Projects, published papers on turn-taking in dialogue, and writing about engines, renderers and the things I build."
+                path="/"
+            />
             {/* the page has no visible title; screen readers and search engines still need one */}
             <h1 className="sr-only">Sean Leishman</h1>
             <div className="text-base font-semibold leading-normal block">

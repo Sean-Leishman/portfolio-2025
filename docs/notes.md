@@ -132,3 +132,23 @@ Design decisions, so they are not re-litigated:
 
 Open, needs the owner: the site is still called **xxx** in the top-left; "Test Public Post" is the
 newest post on the live list; nothing since 2026-09-07 has been deployed (`firebase deploy`).
+
+### 2026-09-30 — accessibility, images, metadata
+
+- Lighthouse accessibility 98/89/100 -> 100 on all three pages: heading order (home had four
+  `h1`s and skipped `h2`; sections are now `h2`, entries `h3`, with one `sr-only` `h1`), contrast
+  (copy button was 2.2:1 at 55% opacity, hljs comments 4.39, numbers 4.32), missing `alt` on two
+  images in chess.mdx, and the email button's accessible name not containing its visible label.
+- Images: experience logos were 7-18KB each for a 16px slot (now ~1KB); `flying_car.webp`, on
+  every post page, was 364KB at 832x1200 for a 256px slot (now 138KB). Home LCP 4.3s -> 3.9s.
+- Tested `font-display: optional`: no measurable LCP change (4.31/4.37 vs 4.30/4.34 over two
+  runs each), so the fonts keep `swap`. Do not re-litigate without a measurement.
+- Per-page metadata (`src/components/Meta.tsx`, React 19 hoists `<title>`/`<meta>` so react-snap
+  captures them): every page previously shared `<title>Sean Leishman</title>` with no description
+  and no share preview. Removed the static title from index.html so there is exactly one, and
+  `scripts/gen-sitemap.mjs` fails the build if any page lacks one. It also writes sitemap.xml and
+  robots.txt; the base URL is `SITE_URL` (default `https://2025-portfolio.web.app`) — set it if a
+  custom domain is ever attached.
+- Remaining perf: post pages carry ~300-500ms TBT hydrating a long article and re-running the
+  highlighter over already-highlighted markup. Fixing it means not hydrating post bodies, which
+  costs in-post links their client-side navigation. Not done.
