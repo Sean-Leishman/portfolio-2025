@@ -7,19 +7,19 @@ function PostTopBar({ backLink, title, date, imageSrc, imageAlt, summary, hideSu
         linkto = <></>;
     }
 
-    let summaryText = <span className="text-muted-foreground italic">{summary}</span>;
+    let summaryText = <p className="text-base italic text-muted-foreground max-w-[68ch]">{summary}</p>;
     if (hideSummary || !summary) {
         summaryText = <></>;
     }
 
     return (
-        <div className="flex flex-col items-start justify-start">
+        <header className="flex flex-col items-start justify-start mb-12">
             {linkto}
             <Figure className="max-w-64 h-auto ml-0 mb-8" src={imageSrc} alt={imageAlt} />
             <p className="mono text-xs text-muted-foreground mb-3">{date}</p>
             <h1 className="text-3xl font-extrabold tracking-tight leading-tight mb-4">{title}</h1>
             {summaryText}
-        </div>
+        </header>
 
     )
 }

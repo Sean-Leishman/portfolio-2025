@@ -17,7 +17,7 @@ imageSrc: "/src/assets/pdga/flying_car.webp"
 
 Over my life I have had a bit of fascination with the game of chess. Reinvigorated, over the period of COVID, when there was not a whole lot to do aside from learn more about the game. But looking at the engines, I was intrigued with how chess could be mastered and possibly be solved by a computational algorithm.
 
-When looking to do this for myself I decided to use Python mostly for it's ease of use as it was the main language I had learnt up to the stage I started coding the application. As well as this, there is a hope that this engine could easily be integrated with machine learning methods in the future as there is a number of libraries for Python that would make this integration very easy.
+When looking to do this for myself I decided to use Python mostly for its ease of use as it was the main language I had learnt up to the stage I started coding the application. As well as this, there is a hope that this engine could easily be integrated with machine learning methods in the future as there are a number of libraries for Python that would make this integration very easy.
 
 In order to display the chess games a GUI is developed using Pygame and elements used to control the game came from the Pygame library.
 
@@ -27,7 +27,7 @@ First off, to see how this project went and how my thought process and skills im
 
 During the game loop, which is the animation loop in Python, we perform functionality in a turn based system that calculates all valid moves on the board for the current board so that when the user selects two squares via a click then the check for a valid move is quick.
 
-The main portions for this logic occurs in the function `self.board.init_valid()` which introduces a lot of inefficiencies in the code that means that the code is not particularly helpful for use in a chess engine where this function would be called many times within a search tree searching for the best move.
+The main portions for this logic occur in the function `self.board.init_valid()` which introduces a lot of inefficiencies in the code that means that the code is not particularly helpful for use in a chess engine where this function would be called many times within a search tree searching for the best move.
 
 ```[python]
 def init_valid(self,color, basic=False):
@@ -76,7 +76,7 @@ def update_valid_moves(self, board):
             copy = [copy[0] + i[0], copy[1] + i[1]]
 ```
 
-This is run for each instance of the Piece class and iterates for it's unit value of it's room (e.g. for bishop [[1,1], [-1,-1], [1,-1], [-1,1]]) and then iterate from that point onwards in those directions until encountering another piece. It is important to note that I have left out implementations for knight, pawn and king for brevity but it follows a similar pattern. However, you may notice that we pass a reference to `board` a list of pieces and as such there is no separation of concerns as this method of `Piece` makes it unclear where the responsibility lies for piece generation.
+This is run for each instance of the Piece class and iterates for its unit value of its room (e.g. for bishop [[1,1], [-1,-1], [1,-1], [-1,1]]) and then iterates from that point onwards in those directions until encountering another piece. It is important to note that I have left out implementations for knight, pawn and king for brevity but it follows a similar pattern. However, you may notice that we pass a reference to `board` a list of pieces and as such there is no separation of concerns as this method of `Piece` makes it unclear where the responsibility lies for piece generation.
 
 The errors also go further on from a conceptual level to more efficiency based errors which are particularly evident in the code for pruning moves that result in checks.
 
@@ -135,7 +135,7 @@ def validate_check(self,color):
 
 ```
 
-There is a lot to impact here that make take a bit of time, particularly to a lack of clear comments but generally, we create a deepcopy of the board in order to make each potential move, then for each move we generate valid moves to check whether the king is in check. This is not an efficient way to perform this functionality. First of all, it is unnecessary to deepcopy our board, an expensive operation, as we are simply making and then reversing moves. Next of all, we generate all valid moves in order to determine whether a piece is attacking the king (and so is in check). However this is not necessary as checks can only occur from pieces in line with the king, or at specific positions that can only be reached by specific pieces and so a lot of computation can be pruned by trying to reverse the focus from generating all moves, to generating moves for the King specifically.
+There is a lot to unpack here that may take a bit of time, particularly due to a lack of clear comments but generally, we create a deepcopy of the board in order to make each potential move, then for each move we generate valid moves to check whether the king is in check. This is not an efficient way to perform this functionality. First of all, it is unnecessary to deepcopy our board, an expensive operation, as we are simply making and then reversing moves. Next of all, we generate all valid moves in order to determine whether a piece is attacking the king (and so is in check). However this is not necessary as checks can only occur from pieces in line with the king, or at specific positions that can only be reached by specific pieces and so a lot of computation can be pruned by trying to reverse the focus from generating all moves, to generating moves for the King specifically.
 
 I will make a lot of this clearer when we move onto the current implementation.
 
@@ -143,15 +143,15 @@ What will stay on though, will be the general idea of separating game logic, sta
 
 ## Moving onto Greener Pastures
 
-With evidence of ill-thought-out design it was time to move onto a new implementation that tries to be essentially less of a naive approach. Beginning with the `Game.py` entry file, there is a much better separation of logic as well as explicit state management via enums that allow for clear logic. Once again, the crux of the content can be found in our `Board.py` and it's initialisation, `Board().initialise_boards()` function.
+With evidence of ill-thought-out design it was time to move onto a new implementation that tries to be essentially less of a naive approach. Beginning with the `Game.py` entry file, there is a much better separation of logic as well as explicit state management via enums that allow for clear logic. Once again, the crux of the content can be found in our `Board.py` and its initialisation, `Board().initialise_boards()` function.
 
 ### Bitboard Magic
 
-Keeping with the trends in chess engine development, rather than expressing the board as a 8x8 2d array with each square holding a `Piece` class, we will be making use of bitboards.
+Keeping with the trends in chess engine development, rather than expressing the board as an 8x8 2d array with each square holding a `Piece` class, we will be making use of bitboards.
 
-Bitboards, are useful and make sense for chess engines. This is due to the representation of the board being in a far more efficient manner.
+Bitboards are useful and make sense for chess engines. This is due to the representation of the board being in a far more efficient manner.
 
-Think about this first, rather than iterating through the rows and then columns of a 8x8 2d array we could iterate through one singular array of length 64 and index using an expression: `PieceAtRowCol(r,c) = Board[r*8 + c]`. However, how these two representations are very similar, just being two areas of contiguous memory. So, why don't we use some other datatype that is capable of storing 64 elements? How about, a 64 bit number. So that each bit set within a number corresponds to a piece? However the representation power of this method is small (we can only store one bit for each cell) so instead we can store multiple bitboards, each corresponding to a certain value.
+Think about this first, rather than iterating through the rows and then columns of an 8x8 2d array we could iterate through one singular array of length 64 and index using an expression: `PieceAtRowCol(r,c) = Board[r*8 + c]`. However, these two representations are very similar, just being two areas of contiguous memory. So, why don't we use some other datatype that is capable of storing 64 elements? How about, a 64 bit number. So that each bit set within a number corresponds to a piece? However the representation power of this method is small (we can only store one bit for each cell) so instead we can store multiple bitboards, each corresponding to a certain value.
 
 
 ```[python]
@@ -180,7 +180,7 @@ def initialise_boards(self):
     self.format_board.update_legal_moves(self.legal_moves)
 ```
 
-In this code for example, bitboards for each piece are stored as a matrix so that we can access each piece bitboard by that pieces colour and piece type. Other bitboards are also in use such as the locations of all pieces on the board, and then the locations of pieces in a colour specific manner.
+In this code for example, bitboards for each piece are stored as a matrix so that we can access each piece bitboard by that piece's colour and piece type. Other bitboards are also in use such as the locations of all pieces on the board, and then the locations of pieces in a colour specific manner.
 
 Don't worry though, the trusty array style of piece representation is still present, specifically in the `FormattedBoard` class which takes in the bitboards and outputs something that can be consumed by our GUI classes present in our first implementation. However, in order to extract piece locations we loop through colours then pieces to get each bitboard. Then we return the indexes of each bit that has been set in the 64 bit number. Essentially this just boils down into some math that allows us to repeatedly remove the least significant bit and get the index of the LSB, until our bitboard is empty (I may write a more in-depth blog about this step). All in all we return a representation of the board that can be used to display our GUI.
 
@@ -188,7 +188,7 @@ Back to logic now and finding our moves in which we introduce a new class `MoveG
 
 ### Tables?
 
-If we think about the problem, we can begin to see that the moves that each piece can make at a certain position is always constant. It is only the presence of either, other pieces or checks, that result in these moves being removed as valid moves. So rather than computing these moves in the main game loop, we can simply lookup these moves in a table that has been precomputed. The general structure of a table for a piece is a 64 long list of 64 bit numbers, each number the possible moves that the piece can make from it's index in the list.
+If we think about the problem, we can begin to see that the moves that each piece can make at a certain position are always constant. It is only the presence of either, other pieces or checks, that result in these moves being removed as valid moves. So rather than computing these moves in the main game loop, we can simply look up these moves in a table that has been precomputed. The general structure of a table for a piece is a 64 long list of 64 bit numbers, each number the possible moves that the piece can make from its index in the list.
 
 Let's take a look at Knights!
 
@@ -235,7 +235,7 @@ As such, we require clipping when the knight will overflow the row, so for examp
 | 0 0 0 0 0 0 0 0 |     | 0 1 1 1 1 1 1 1 |     | 0 0 0 0 0 0 0 0 |
 ```
 
-In the code this is our `clear_files` array which just stores these bitboards that mask certain files, and the same is done for ranks. As such this allows the removes knight positions when performing certain moves. Then in order to move the knight position, our clipped knight position is bit shifted to move the set bit into a proper position:
+In the code this is our `clear_files` array which just stores these bitboards that mask certain files, and the same is done for ranks. As such this allows the removal of knight positions when performing certain moves. Then in order to move the knight position, our clipped knight position is bit shifted to move the set bit into a proper position:
 
 
 ```[python]
@@ -258,23 +258,23 @@ In the code this is our `clear_files` array which just stores these bitboards th
 | 0 0 0 0 0 0 0 0 |            | 0 0 0 0 0 0 0 0 |
 ```
 
-These bitshifts result in new positions for our knight that corresponds to moves. Each move direction is stored in an individual bitboard which are then ORd together to form a final bitboard containing all knight moves for a certain position.
+These bitshifts result in new positions for our knight that correspond to moves. Each move direction is stored in individual bitboards which are then ORd together to form a final bitboard containing all knight moves for a certain position.
 
-This idea of masking for files and ranks allows us to not only perform clipping for out-of-bounds move but to also verify pawn ranks.
+This idea of masking for files and ranks allows us to not only perform clipping for out-of-bounds moves but to also verify pawn ranks.
 
-Generally a similar style is applied for knights, pawns and kings as they can be classed as non-sliding pieces (i.e their movements are fixed to a certain number of squares by jumping). For pawns, special considerations should be placed onto the ranks where they can shift forwards 2 squares and also the direction of that shift, as the colour is the decider for this decision.
+Generally a similar style is applied for knights, pawns and kings as they can be classed as non-sliding pieces (i.e. their movements are fixed to a certain number of squares by jumping). For pawns, special considerations should be placed onto the ranks where they can shift forwards 2 squares and also the direction of that shift, as the colour is the decider for this decision.
 
-Moving on, bishops, rook and queens follow a different logic that means we don't fully determine their move set. The non-sliding pieces moves can be pruned simply by performing AND with free squares and as such is simple. However for sliding pieces, we will have to remove moves that come after a "blocker" and allow the moves in between the mover and the blocker.
+Moving on, bishops, rooks and queens follow a different logic that means we don't fully determine their move set. The non-sliding pieces' moves can be pruned simply by performing AND with free squares and as such is simple. However for sliding pieces, we will have to remove moves that come after a "blocker" and allow the moves in between the mover and the blocker.
 
 #### Sliding Moves
 
 The general idea is that, we can reduce the problem down to a singular rank. Each sliding piece (aside from the queen but we will get back to that) has two axes of movements. So for rooks this is along the files & ranks and for the bishop this is along the diagonal and anti-diagonal. Each of these directions of movements can be transformed, ideally into a one dimension space, as any other square on the board is irrelevant that is not a part of the possible movement direction. As such there are a possible 256 configurations of occupiers on one rank. Each cell can either be filled or not filled by an attacker. Then our piece can be placed on 8 possible squares.
 
-As such, as part of our precomputation these the bits which can be attacked are calculated for each piece position on one rank, and then all the possible configurations of attackers. This can then be used during real-time move generation to lookup our possible moves for a certain occupation and piece location.
+As such, as part of our precomputation the bits which can be attacked are calculated for each piece position on one rank, and then all the possible configurations of attackers. This can then be used during real-time move generation to look up our possible moves for a certain occupation and piece location.
 
 During move generation for sliding pieces, each direction of movement is mapped onto the first rank through a series of bit operations (which I may dive deeper into in another post). As for the queen, this is essentially just the combination of bishop and rook movements and so we can OR their move sets.
 
-Thus we have effectively now produced legal moves for all of our pieces mostly by precomputation. This is the power of bitboards. We can use masks and bitwise operations in order to efficiently compute new positions simply that would other require iterators and other list based functions that cause too much computation.
+Thus we have effectively now produced legal moves for all of our pieces mostly by precomputation. This is the power of bitboards. We can use masks and bitwise operations in order to efficiently compute new positions simply that would otherwise require iterators and other list based functions that cause too much computation.
 
 ### Our King is Under Attack!!?
 
@@ -307,11 +307,11 @@ def king_is_attacked_without_move(self,board):
     return pawn_check | knight_check | bishop_check | rook_check
 ```
 
-We simply behave as if the king is an attacking piece (such as a pawn, knight etc.) and check if the attacking piece's moves from the king position matches with a matching opponent's piece. If the king is being moved then we have to first of all apply the move and then perform the same action as earlier to check if the king is moving into check.
+We simply behave as if the king is an attacking piece (such as a pawn, knight etc.) and check if the attacking piece's moves from the king position match with a matching opponent's piece. If the king is being moved then we have to first of all apply the move and then perform the same action as earlier to check if the king is moving into check.
 
 ### Castling
 
-Now castling just involved, storing castling rights for each colour and then performing the castling if the rights are held and the resulting move is invalid due to checks. Rights are granted when the spaces in between king and rook are freed and removed if either pieces move. Checking for castling just means moves the king onto squares in between castling and then checking for checks. All in all, castling is quite an involved process that results in possibly some inefficiencies and where I would like to improve in the future.
+Now castling just involves storing castling rights for each colour and then performing the castling if the rights are held and the resulting move is invalid due to checks. Rights are granted when the spaces in between king and rook are freed and removed if either piece moves. Checking for castling just means moving the king onto squares in between castling and then checking for checks. All in all, castling is quite an involved process that results in possibly some inefficiencies and where I would like to improve in the future.
 
 ### En Passant
 
@@ -396,7 +396,7 @@ def make_move(self, move, inplace=True):
     return newBoard
 ```
 
-First off, we allow for the copy of boards but by default this should not be done. A move is received as a parameter and is checked against our valid moves. Also at each turn we reset the current colours en-passant mask. Special logic is performed for castling pieces and promotions as they require multiple piece changes. Castling moves both the rook and queen and promotions needs a piece to disappear and a new piece to be allocated. Promotion is decided when a pawn is moved that is currently on the penultimate rank and automatically a queen is placed in that position. En-passent is also specially worked on by setting masks of recent vulnerable pieces (double move) and since en passant is only performed on certain ranks, those are checked and performed by checking properties set.
+First off, we allow for the copy of boards but by default this should not be done. A move is received as a parameter and is checked against our valid moves. Also at each turn we reset the current colour's en-passant mask. Special logic is performed for castling pieces and promotions as they require multiple piece changes. Castling moves both the rook and queen and promotions need a piece to disappear and a new piece to be allocated. Promotion is decided when a pawn is moved that is currently on the penultimate rank and automatically a queen is placed in that position. En-passent is also specially worked on by setting masks of recent vulnerable pieces (double move) and since en passant is only performed on certain ranks, those are checked and performed by checking properties set.
 
 Squares are cleared and set and kings are checked for checks and the GUI board is updated in this method. Although possibly a method that is too long it seems fairly clear the functions the code performs.
 
@@ -404,11 +404,11 @@ Check out the acknowledgements for the sources and inspiration.
 
 ## Lessons Learnt
 
-Overall, I deeply enjoyed the challenge involved in this process. From writing hard to understand and inefficient code to writing somewhat less hard to understand and inefficient code. It is written in Python of course. But, this has been fairly enjoyable process thus far. Seeing my old code gives us all a bit of a heart attack but I think it is a worthwhile endeavour. We get to see how we have along, what we have improved one, and what problems keeps giving us trouble. In particular, this project emphasised test-driven development and trying to write code that can be tested in a modular fashion so that an overall processes can be patched together by well-tested components. Also, utilising maths and logic in this comprehensive manner has been a riveting challenging on both a conceptual and practical level however the rewards are clear. Processes are simpler, code is more efficient and easier to expand and scale. I hope I can take what I have learnt here and apply them to many areas of my coding life.
+Overall, I deeply enjoyed the challenge involved in this process. From writing hard to understand and inefficient code to writing somewhat less hard to understand and inefficient code. It is written in Python of course. But, this has been a fairly enjoyable process thus far. Seeing my old code gives us all a bit of a heart attack but I think it is a worthwhile endeavour. We get to see how we have come along, what we have improved on, and what problems keep giving us trouble. In particular, this project emphasised test-driven development and trying to write code that can be tested in a modular fashion so that an overall process can be patched together by well-tested components. Also, utilising maths and logic in this comprehensive manner has been a riveting challenge on both a conceptual and practical level however the rewards are clear. Processes are simpler, code is more efficient and easier to expand and scale. I hope I can take what I have learnt here and apply it to many areas of my coding life.
 
 ### Should I Plan?
 
-Looking at that first code attempt made me think. Should I be planning this more? Should I try to become up with a more efficient solution? As you can probably tell when I wanted to do begin I dived head first. And even though it may have resulted in inefficiencies it was worth it. I learnt more in failing and struggling in order to learn the importance of what makes code good. Even though now I might try to plan a bit more instead of going head first, maybe I will keep diving in chest first. Maybe.
+Looking at that first code attempt made me think. Should I be planning this more? Should I try to come up with a more efficient solution? As you can probably tell when I wanted to begin I dived head first. And even though it may have resulted in inefficiencies it was worth it. I learnt more in failing and struggling in order to learn the importance of what makes code good. Even though now I might try to plan a bit more instead of going head first, maybe I will keep diving in chest first. Maybe.
 
 ## What's Next?
 

@@ -15,11 +15,11 @@ imageSrc: "/src/assets/pdga/flying_car.webp"
 
 <Figure className="w-auto max-h-100 mx-auto" src="/src/assets/playSound.webp" />
 
-GyroSound was created as part a group project while on my exchange year in Singapore. We were tasked with coming up with an Android App which utilised the instrumentation available on the device. What came from this process was GyroSound.
+GyroSound was created as part of a group project while on my exchange year in Singapore. We were tasked with coming up with an Android App which utilised the instrumentation available on the device. What came from this process was GyroSound.
 
 ## What is GyroSound?
 
-GyroSound is an Android app that focussed on encouraging people of all ages to explore music with no barriers to entry. Rather than using any complicated instruments, users can use the application to create music on the fly in a fun and novel manner.
+GyroSound is an Android app that focuses on encouraging people of all ages to explore music with no barriers to entry. Rather than using any complicated instruments, users can use the application to create music on the fly in a fun and novel manner.
 
 Users are able to record sounds or use prerecorded sounds in conjunction with pitch modulation to produce music. The user assigns sounds to buttons each of which can be pressed and adjusted by rotating and moving the phone.
 
@@ -33,13 +33,13 @@ But we wanted to answer the question if this same product could be similarly app
 
 ## System Deepdive
 
-The system can be split into three major parts: the UI, sounds storage and sound playback & modulation. These parts in combination produce the final result
+The system can be split into three major parts: the UI, sound storage and sound playback & modulation. These parts in combination produce the final result.
 
 ### UI
 
 #### Main Page
 
-The UI follows a functional approach as were particularly keen on creating a UI that focusses on delivering an intuitive and approachable experience. The main page consists of eight buttons which each displays the settings that are linked to the sound of that button.
+The UI follows a functional approach as we were particularly keen on creating a UI that focusses on delivering an intuitive and approachable experience. The main page consists of eight buttons which each display the settings that are linked to the sound of that button.
 
 #### Sound Selection & Editing Page
 
@@ -53,7 +53,7 @@ There is then the option of going to the 'Edit Sounds' page that allows the user
 
 Over the lifetime of the project there was a large amount of experimentation in our data modelling and how data would persist across activities.
 
-At first, there was the option of passing data through intents, in particular from the main page to the editing page and vice versa. However we quickly realise that this would result in code that could not be easily extended due to how data would have to be passed between activities.
+At first, there was the option of passing data through intents, in particular from the main page to the editing page and vice versa. However we quickly realised that this would result in code that could not be easily extended due to how data would have to be passed between activities.
 
 #### Android ViewModel & LiveData
 
@@ -65,7 +65,7 @@ However, this brings up another issue, as we cannot share data across activities
 
 #### Data Repository
 
-To resolve this issue, a singleton class was implemented to store data that should be persistent across activities. On initialisation of an activity, and as such it's `ViewModel`, data is gathered from the data repository and data is set consistently when it is required based on user input.
+To resolve this issue, a singleton class was implemented to store data that should be persistent across activities. On initialisation of an activity, and as such its `ViewModel`, data is gathered from the data repository and data is set consistently when it is required based on user input.
 
 
 ```[kotlin]
@@ -101,7 +101,7 @@ As such, we receive the benefit of both classes with no memory leakage and persi
 
 <Figure className="w-auto max-h-100 mx-auto" src="/src/assets/gyroSystem.webp" />
 
-The requirements of the project meant that it was necessary to identity a method that could be efficiently and with reasonable effectiveness, change the pitch of the sound that is being played. We decided to use `SoundPool` due to it's inbuilt ability to modulate frequency.
+The requirements of the project meant that it was necessary to identify a method that could, efficiently and with reasonable effectiveness, change the pitch of the sound that is being played. We decided to use `SoundPool` due to its inbuilt ability to modulate frequency.
 
 #### Pitch Modulation Calculation
 
@@ -115,13 +115,13 @@ $$
 
 This equation relates to adjusting the current frequency by N semitones.
 
-In order to relate our pitch calculation to the devices gyroscopic measurements we made use of the roll value from the orientation of the gyroscope present on the phone
+In order to relate our pitch calculation to the device's gyroscopic measurements we made use of the roll value from the orientation of the gyroscope present on the phone
 
 $$
 frequency = {basefrequency} * 1.25^{roll}
 $$
 
-1.25 is used as a base of the power in order to smoothen and normalise the noisy output that is present in the gyroscope data so that the pitch does not fluctuate too rapidly. The result was derived from mapping SoundPool's upper & lower frequency limits to the upper & lower limits of the gyroscope's sensor. As such, we could module the full range of the device's orientation.
+1.25 is used as a base of the power in order to smoothen and normalise the noisy output that is present in the gyroscope data so that the pitch does not fluctuate too rapidly. The result was derived from mapping SoundPool's upper & lower frequency limits to the upper & lower limits of the gyroscope's sensor. As such, we could modulate the full range of the device's orientation.
 
 As such a final frequency can be calculated that allows pitch to be specified by the user and then by the orientation of the device.
 
@@ -156,11 +156,11 @@ There is a large spike in energy level as there is quite a bit of initialisation
 
 ### Editing Page
 
-The levels of CPU and energy usage is consistent with the main page however there is an increase in memory usage. Although CPU usage spikes as the user records as a pop up fragment appears and this requires some initialisation and memory usage.
+The levels of CPU and energy usage are consistent with the main page however there is an increase in memory usage. Although CPU usage spikes as the user records as a pop up fragment appears and this requires some initialisation and memory usage.
 
 ## Evaluation
 
-Overall, there is a general level of satisfaction with delivering upon our original goal of providing a fun way to interact with sound usage, just by intuitive movements. The quality of the application is currently limited by the quality of audio files in use and the application does enhance these shortcomings. Where, the application modulates and transforms the clips distortions can appear and become unpleasant to listen to. As such further improvements in audio modulation and audio file quality could be used to improve the quality of the sound file.
+Overall, there is a general level of satisfaction with delivering upon our original goal of providing a fun way to interact with sound usage, just by intuitive movements. The quality of the application is currently limited by the quality of audio files in use and the application does enhance these shortcomings. Where the application modulates and transforms the clips, distortions can appear and become unpleasant to listen to. As such further improvements in audio modulation and audio file quality could be used to improve the quality of the sound file.
 
 There is also the issue of recording audio as the microphone takes time to pick up information and as such there is choppy playback of recorded sounds where the sound may not be perfectly aligned with the limits of the sound clip.
 
