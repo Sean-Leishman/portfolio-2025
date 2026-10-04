@@ -16,7 +16,7 @@ function PostTopBar({ backLink, title, date, imageSrc, imageAlt, summary, hideSu
     return (
         <header className="flex flex-col items-start justify-start mb-12">
             {linkto}
-            <Figure className="max-w-64 h-auto ml-0 mb-2" src={imageSrc} alt={imageAlt} />
+            <Figure className="max-h-64 w-auto ml-0 mb-2" src={imageSrc} alt={imageAlt} />
             <ImageCredit src={imageSrc} className="mb-8" />
             <p className="mono text-xs text-muted-foreground mb-3">{date}</p>
             <h1 className="text-3xl font-extrabold tracking-tight leading-tight mb-4">{title}</h1>
