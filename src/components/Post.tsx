@@ -22,7 +22,7 @@ function Post({ compiledMDX, title, date, imageSrc, imageAlt, summary, path }: {
                 <MDXRenderer compiledMDX={compiledMDX} />
                 <div className="mt-16 text-base italic text-muted-foreground">
                     <p>{'Thanks for reading — Sean.'}</p>
-                    <p className="mt-2 not-italic"><LinkTo to="/posts" text="← All posts" /></p>
+                    <p className="mt-6 not-italic"><LinkTo to="/posts" text="← All posts" /></p>
                 </div>
             </div>
             <Footer />
