@@ -18,7 +18,8 @@
     "include": [
       "/",
       "/posts",
-      "/projects"
+      "/projects",
+      "/404"
     ],
     "puppeteerArgs": [
       "--no-sandbox",

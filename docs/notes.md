@@ -152,3 +152,18 @@ newest post on the live list; nothing since 2026-09-07 has been deployed (`fireb
 - Remaining perf: post pages carry ~300-500ms TBT hydrating a long article and re-running the
   highlighter over already-highlighted markup. Fixing it means not hydrating post bodies, which
   costs in-post links their client-side navigation. Not done.
+
+### 2026-10-04 — 404, metadata and the test post
+
+- There was no catch-all route: `firebase.json` rewrote every unknown URL to index.html, so a
+  mistyped path served the home page's HTML with a 200 and then rendered blank. Now
+  `src/pages/NotFound.tsx` answers `path="*"`, react-snap pre-renders it (`/404` in the reactSnap
+  include), `gen-sitemap.mjs` copies it over react-snap's empty `404.html` and keeps it out of the
+  sitemap, and the rewrite is gone — every route is pre-rendered, so Firebase can serve a real 404
+  status. Verified against a throwaway static server mimicking Firebase: real pages 200 without
+  trailing slashes, unknown paths 404 with the Not-found page.
+- The test post is gone the supported way: `visibility: private` on the vault note, then the
+  sync's orphan cleanup removed it. Flip it back to republish.
+- Posts proofread: 108 grammar/spelling fixes, plus a stray `}}` that rendered literally in
+  stocktrend. Left alone: "the application does enhance these shortcomings" (gyrosound) reads as
+  if it means "exacerbate" — the author's call, not a typo.

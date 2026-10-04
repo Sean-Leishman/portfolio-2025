@@ -18,6 +18,7 @@ function Meta({ title, description, path, image }: { title: string, description:
             <meta property="og:url" content={url} />
             {imageUrl && <meta property="og:image" content={imageUrl} />}
             <meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
+            {path === '/404' && <meta name="robots" content="noindex" />}
         </>
     );
 }

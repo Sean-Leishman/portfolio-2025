@@ -3,6 +3,7 @@ import './App.css'
 import Home from './pages/Home'
 import Posts from './pages/Posts'
 import Projects from './pages/Projects'
+import NotFound from './pages/NotFound'
 import PostRoute from './components/PostRoute'
 import { Toaster } from './components/ui/sonner'
 
@@ -26,6 +27,7 @@ function App() {
                     <Route path="/posts" element={<Posts />} />
                     <Route path="/projects" element={<Projects />} />
                     {itemPaths}
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </Router>
             <Toaster />
