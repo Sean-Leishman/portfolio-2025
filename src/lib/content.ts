@@ -4,6 +4,11 @@ export function getPosts() {
     return contentData.posts;
 }
 
+// the date of the last commit at build time, shown in the footer
+export function getSiteUpdated() {
+    return contentData.updated;
+}
+
 // Post pages pull in the MDX runtime, the syntax highlighter and the compiled body. None of that
 // belongs in the bundle every page downloads, so it is fetched per post and kept once loaded.
 export type Post = ReturnType<typeof getPosts>[number];

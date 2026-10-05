@@ -13,7 +13,7 @@ function PostRoute({ post }: { post: Post }) {
 
     if (!entry) return null;
     const { Post: PostView, compiledMdx } = entry;
-    return <PostView compiledMDX={compiledMdx} title={post.title} date={post.date} imageSrc={post.imageSrc} imageAlt={post.imageAlt} summary={post.summary} path={post.link} />;
+    return <PostView compiledMDX={compiledMdx} title={post.title} date={post.date} updated={post.updated} imageSrc={post.imageSrc} imageAlt={post.imageAlt} summary={post.summary} path={post.link} />;
 }
 
 export default PostRoute;

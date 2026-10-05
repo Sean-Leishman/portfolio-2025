@@ -43,7 +43,7 @@ function Home() {
                     <img src="/src/assets/pdga/dr-w.webp" alt="W" className="w-24 h-auto mr-2 clear-none float-left" />
                     elcome to my corner of the internet. I'm <span className="text-accent italic">Sean</span>.
                     This is where I discuss my projects, share my thoughts, and document my journey.
-                    I have recently graduated with a degree in Computer Science from the University of Edinburgh and will be working as a Graduate Software Engineer at Squarepoint Capital.
+                    I graduated in Computer Science from the University of Edinburgh and now work as a Software Engineer at Squarepoint Capital, on a time-series database.
                     I have a passion for software engineering and natural language processing but I love to explore new technologies and ideas.
                 </span>
                 <span className="block mt-6">

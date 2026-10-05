@@ -1,15 +1,15 @@
-import { getCredit } from '../lib/imageCredits';
+import { ARCHIVE, getCredit } from '../lib/imageCredits';
 
 // A one-line credit under an image, where the source is known.
 function ImageCredit({ src, className = '' }: { src?: string, className?: string }) {
+    if (!src) return null;
     const credit = getCredit(src);
-    if (!credit) return null;
+    const href = credit?.href ?? ARCHIVE;
+    const text = credit ? `${credit.title} · ${credit.artist}, ${credit.year} ↗` : 'Public Domain Image Archive ↗';
 
     return (
         <p className={`mono text-xs text-muted-foreground ${className}`}>
-            <a href={credit.href} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
-                {`${credit.title} · ${credit.artist}, ${credit.year} ↗`}
-            </a>
+            <a href={href} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">{text}</a>
         </p>
     );
 }

@@ -6,6 +6,8 @@ import fs from 'fs';
 import path from 'path';
 import process from 'process';
 
+import { execFileSync } from 'child_process';
+
 import mdx from '@mdx-js/rollup';
 import { bundleMDX } from 'mdx-bundler';
 import remarkGfm from 'remark-gfm';
@@ -18,6 +20,14 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 const components: { [key: string]: string } = {
     "./src/components/LinkTo.tsx": "",
     "./src/components/Figure.tsx": "",
+}
+
+function lastCommitDate(file: string): string {
+    try {
+        return execFileSync('git', ['log', '-1', '--format=%cs', '--', file], { encoding: 'utf-8' }).trim();
+    } catch {
+        return ''; // no git history (fresh clone, shallow CI checkout): just omit the date
+    }
 }
 
 async function generateItems(directory: string) {
@@ -62,6 +72,7 @@ async function generateItems(directory: string) {
                     imageSrc: frontmatter.imageSrc || '',
                     imageAlt: frontmatter.imageAlt || '',
                     summary: frontmatter.Summary || frontmatter.summary || '',
+                    updated: lastCommitDate(filePath),
                     // Was extractLink(directory, title, date), which put the raw title -- spaces,
                     // colons and all -- straight into the URL. react-snap then wrote those routes to
                     // disk with literal %20 in the directory name, so a browser asking for
@@ -86,6 +97,7 @@ function contentGeneratorPlugin() {
         async buildStart() {
             const content = {
                 posts: await generateItems('posts'),
+                updated: lastCommitDate('.'),
             }
 
             const outputPath = path.join(process.cwd(), 'src', 'generated');
@@ -104,7 +116,7 @@ function contentGeneratorPlugin() {
 
             fs.writeFileSync(
                 path.join(outputPath, 'content.json'),
-                JSON.stringify({ posts: content.posts.map(({ compiledMdx: _, ...post }) => post) }, null, 2)
+                JSON.stringify({ posts: content.posts.map(({ compiledMdx: _, ...post }) => post), updated: content.updated }, null, 2)
             );
 
         }
