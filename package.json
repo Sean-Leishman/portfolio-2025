@@ -20,7 +20,8 @@
       "/",
       "/posts",
       "/projects",
-      "/404"
+      "/404",
+      "/colophon"
     ],
     "puppeteerArgs": [
       "--no-sandbox",

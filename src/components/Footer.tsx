@@ -1,3 +1,4 @@
+import LinkTo from './LinkTo';
 import { ARCHIVE } from '../lib/imageCredits';
 import { getSiteUpdated } from '../lib/content';
 
@@ -15,6 +16,8 @@ function Footer() {
             <p>
                 {'Artwork from the '}
                 <a href={ARCHIVE} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">Public Domain Image Archive ↗</a>
+                {' · '}
+                <LinkTo to="/colophon" text="Colophon" underline={false} customClassName="hover:text-accent transition-colors" />
             </p>
         </footer>
     )

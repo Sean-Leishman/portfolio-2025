@@ -3,7 +3,7 @@
 // the general credit in the footer.
 export type Credit = { title: string, artist: string, year: string, href: string };
 
-const credits: Record<string, Credit> = {
+export const credits: Record<string, Credit> = {
     '/src/assets/pdga/surprise-in-terror.webp': {
         title: 'Surprise in Terror', artist: 'Joseph Ducreux', year: 'ca. 1790',
         href: 'https://pdimagearchive.org/images/56ab8259-1d13-4e40-b90a-244e9ab66964/',
