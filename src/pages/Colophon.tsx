@@ -31,7 +31,7 @@ function Colophon() {
                 <p>
                     Body text is <strong className="font-bold">Merriweather</strong>, a serif drawn for screens, set at 16px with
                     a 1.5 line height and lines capped at about 68 characters. Headings use the same family at heavier
-                    weights; dates, venues and other metadata use <strong className="font-bold">JetBrains Mono</strong>, so they read as
+                    weights; dates, venues and other metadata use <strong className="font-bold">Iosevka</strong>, so they read as
                     a different kind of information rather than merely smaller text. Links and section markers are the one
                     accent colour. The files are self-hosted Latin subsets — no third-party font request.
                 </p>
