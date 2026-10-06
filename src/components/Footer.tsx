@@ -11,7 +11,8 @@ function Footer() {
             <p>
                 {`Sean Leishman · ${new Date().getFullYear()} · `}
                 <a href="https://github.com/Sean-Leishman" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">GitHub ↗</a>
-                {updated ? ` · updated ${updated}` : ''}
+                {updated ? ` · updated ${updated} · ` : ' · '}
+                <a href="/feed.xml" className="hover:text-accent transition-colors">RSS</a>
             </p>
             <p>
                 {'Artwork from the '}

@@ -4,12 +4,13 @@ import LinkTo from './LinkTo';
 import Figure from './Figure';
 import { EntryDescription, EntryHeader, EntryRow, ExternalLink, Tags, metaLink, titleLink } from './Entry';
 
-function ProjectCard({ name, date, description, blogLink, externalLink, githubLink, image, technologies, headingAs }: { name: string, date: string, description: string, blogLink: string | undefined, externalLink: string | undefined, githubLink: string, image?: string, technologies: string[], headingAs?: 'h2' | 'h3' }) {
+function ProjectCard({ name, date, description, blogLink, externalLink, githubLink, image, technologies, headingAs, isFinished = true }: { name: string, date: string, description: string, blogLink: string | undefined, externalLink: string | undefined, githubLink: string, image?: string, technologies: string[], headingAs?: 'h2' | 'h3', isFinished?: boolean }) {
     const title = externalLink ? <ExternalLink href={externalLink} className={titleLink}>{`${name} ↗`}</ExternalLink> : name;
 
     const meta = (
         <>
             <span>{date}</span>
+            {!isFinished && <span className="text-accent">in progress</span>}
             {blogLink && <LinkTo to={blogLink} text="Read more" underline={false} customClassName={metaLink} />}
             {githubLink && <ExternalLink href={githubLink} className={titleLink} label={`${name} on GitHub`}><FaGithub className="w-4 h-4" /></ExternalLink>}
         </>

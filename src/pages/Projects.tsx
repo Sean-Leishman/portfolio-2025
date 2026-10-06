@@ -24,6 +24,7 @@ function Projects() {
                         image={project.image}
                         githubLink={project.githubLink}
                         technologies={project.technologies}
+                        isFinished={project.isFinished}
                         headingAs="h2"
                     />
                 ))}

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && react-snap && node scripts/inline-css.mjs && node scripts/gen-sitemap.mjs",
+    "build": "tsc -b && vite build && react-snap && node scripts/inline-css.mjs && node scripts/gen-sitemap.mjs && node scripts/gen-feed.mjs",
     "lint": "eslint . && node scripts/check-classes.mjs",
     "preview": "vite preview",
     "sync": "npx tsx scripts/sync-obsidian.ts",

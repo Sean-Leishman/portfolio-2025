@@ -10,7 +10,7 @@ const pages = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) 
         : e.name === 'index.html' ? ['/' + path.relative(dist, dir)] : []);
 
 // 200.html/404.html are react-snap's SPA fallbacks, not pages
-const urls = pages(dist).filter((p) => p !== '/404').sort();
+const urls = pages(dist).filter((p) => p !== '/404' && p !== '/feed.xml').sort();
 const today = new Date().toISOString().slice(0, 10);
 
 // the titles come from React's hoisted <title>; if that ever stops working, every page loses one

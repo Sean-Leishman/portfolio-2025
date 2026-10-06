@@ -69,6 +69,7 @@ function Home() {
                         date={project.date}
                         githubLink={project.githubLink}
                         technologies={project.technologies}
+                        isFinished={project.isFinished}
                     />
                 ))}
             </EntryList>
