@@ -34,7 +34,7 @@ Generally, there was an approach of quickly slamming together components to form
 <Figure className="w-auto max-h-128" src="/src/assets/ettuuv-arch.webp" />
 
 The final solution involved overcoming numerous engineering challenges to allow communication between various different components, effectively and within a fairly short time frame. The main roadblock occurred within the phone and arduino module as the chosen method of communication was bluetooth and as such, data was fairly easily sent out of the bluetooth module but then the phone itself had to send the data to a server. The
-<LinkTo to="https://play.google.com/store/apps/details?id=com.adafruit.bluefruit.le.connect&hl=en_GB&gl=US" text="app" /> was not made by us and as such we were restricted by the chosen method.
+<LinkTo to="https://learn.adafruit.com/bluefruit-le-connect" text="app" /> was not made by us and as such we were restricted by the chosen method.
 
 ```[cpp]
 if (currentMillis - previousSendMillis >= sendInterval) {

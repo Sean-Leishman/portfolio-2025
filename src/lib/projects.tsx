@@ -133,7 +133,7 @@ const projects = [
         date: "2023",
         image: "/src/assets/Raytracer.webp",
         technologies: ["C++", "Graphics"],
-        githubLink: "https://github.com/Sean-Leishman/raucous-wart",
+        githubLink: "https://github.com/Sean-Leishman/beautiful-world",
         isFinished: true,
     },
     {
