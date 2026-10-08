@@ -17,7 +17,7 @@ function Neighbour({ post, direction }: { post?: PostMeta, direction: 'newer' | 
     );
 }
 
-function Post({ compiledMDX, title, date, updated, imageSrc, imageAlt, summary, path, newer, older }: { compiledMDX: string | undefined; title: string | undefined; date: string | undefined; updated?: string; imageSrc?: string; imageAlt?: string, summary?: string, path?: string, newer?: PostMeta, older?: PostMeta }) {
+function Post({ compiledMDX, title, date, updated, imageSrc, imageAlt, summary, tags, path, newer, older }: { compiledMDX: string | undefined; title: string | undefined; date: string | undefined; updated?: string; imageSrc?: string; imageAlt?: string, summary?: string, tags?: string[], path?: string, newer?: PostMeta, older?: PostMeta }) {
     return (
         <main>
             <div className="max-w-2xl mx-auto px-4 text-left">
@@ -31,6 +31,7 @@ function Post({ compiledMDX, title, date, updated, imageSrc, imageAlt, summary, 
                     imageSrc={imageSrc}
                     imageAlt={imageAlt}
                     summary={summary}
+                    tags={tags}
                 />
                 <MDXRenderer compiledMDX={compiledMDX} />
                 <div className="mt-16 text-base italic text-muted-foreground">
